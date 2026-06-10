@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rebolo 2025 · Tablero Estratégico de Seguridad</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#07080f;--surface:#0c0f1c;--card:#101425;--border:#1a2040;--border2:#222a52;
+  --text:#d0d8f5;--muted:#4e5d82;--dim:#2e3a5c;
+  --red:#c0392b;--red-l:#e74c3c;--red-ll:#ff5555;--red-bg:rgba(192,57,43,.15);
+  --crimson:#8b0000;--blood:#ff0000;
+  --orange:#e67e22;--orange-bg:rgba(230,126,34,.12);
+  --yellow:#f1c40f;--yellow-bg:rgba(241,196,15,.1);
+  --green:#27ae60;--green-bg:rgba(39,174,96,.1);
+  --blue:#2471a3;--cyan:#00c9ff;--violet:#7d3c98;
+  --gold:#d4ac0d;--gold-bg:rgba(212,172,13,.1);
+  --fp:'Barlow Condensed',sans-serif;
+  --fb:'Barlow',sans-serif;
+  --fm:'IBM Plex Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px;min-height:100vh;}
+
+/* ── TOPBAR ── */
+.topbar{
+  background:linear-gradient(135deg,#050508 0%,#0c0f1c 60%,#14091a 100%);
+  border-bottom:2px solid var(--red);
+  padding:0 28px;display:flex;align-items:center;justify-content:space-between;
+  height:64px;position:sticky;top:0;z-index:200;
+}
+.tb-l{display:flex;align-items:center;gap:16px;}
+.tb-emblem{
+  width:44px;height:44px;flex-shrink:0;
+  background:radial-gradient(circle at 40% 35%,#8b0000,#c0392b 60%,#7d0000);
+  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.3em;box-shadow:0 0 18px rgba(192,57,43,.4);
+}
+.tb-barrio{font-family:var(--fp);font-weight:900;font-size:1.8em;letter-spacing:.06em;color:#fff;line-height:1;}
+.tb-barrio span{color:var(--red-l);}
+.tb-meta{font-size:.7em;color:var(--muted);letter-spacing:.04em;margin-top:2px;}
+.tb-r{display:flex;align-items:center;gap:18px;}
+.tb-badge-crit{
+  padding:5px 14px;border-radius:4px;
+  font-family:var(--fp);font-size:.82em;font-weight:800;letter-spacing:.1em;
+  background:var(--red-bg);border:1px solid rgba(192,57,43,.5);color:var(--red-ll);
+  display:flex;align-items:center;gap:7px;
+  box-shadow:0 0 12px rgba(192,57,43,.15);
+}
+.pdot{width:8px;height:8px;border-radius:50%;background:var(--red-ll);animation:pd 1.5s infinite;}
+@keyframes pd{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(231,76,60,.5);}50%{opacity:.5;box-shadow:0 0 0 5px rgba(231,76,60,0);}}
+.tb-stat{text-align:right;}
+.tb-stat-n{font-family:var(--fm);font-size:1.3em;font-weight:600;color:var(--red-l);line-height:1;}
+.tb-stat-l{font-size:.65em;color:var(--muted);letter-spacing:.04em;}
+.tb-divv{width:1px;height:30px;background:var(--border2);}
+
+/* ── ALERT BANNER ── */
+.banner{
+  background:linear-gradient(90deg,rgba(139,0,0,.3),rgba(192,57,43,.12),rgba(139,0,0,.05));
+  border-bottom:1px solid rgba(192,57,43,.25);
+  padding:7px 28px;display:flex;align-items:center;gap:14px;font-size:.78em;color:rgba(255,200,200,.7);
+}
+.banner strong{color:var(--red-l);}
+.banner-icon{font-size:1.1em;}
+
+/* ── FILTER BAR ── */
+.filterbar{
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:8px 28px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  position:sticky;top:64px;z-index:199;
+}
+.fbl{font-family:var(--fp);font-size:.72em;font-weight:700;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;white-space:nowrap;}
+.fbs{background:var(--card);border:1px solid var(--border2);border-radius:4px;color:var(--text);font-family:var(--fb);font-size:.82em;padding:5px 10px;cursor:pointer;}
+.fbs:focus{outline:none;border-color:var(--red);}
+.fbr{accent-color:var(--red);width:90px;cursor:pointer;}
+.fbrv{font-family:var(--fm);font-size:.78em;color:var(--red-l);min-width:20px;text-align:center;}
+.btn-rst{padding:5px 14px;background:transparent;border:1px solid var(--border2);border-radius:4px;color:var(--muted);font-family:var(--fp);font-size:.78em;font-weight:700;letter-spacing:.06em;cursor:pointer;transition:all .2s;}
+.btn-rst:hover{border-color:var(--red);color:var(--red-l);}
+.fbcnt{margin-left:auto;font-family:var(--fm);font-size:.8em;color:var(--muted);}
+.fbcnt b{color:var(--red-l);}
+
+/* ── WRAP ── */
+.wrap{max-width:1920px;margin:0 auto;padding:14px 28px 48px;}
+
+/* ── KPI STRIP ── */
+.kstrip{display:grid;grid-template-columns:repeat(6,1fr);gap:11px;margin-bottom:14px;}
+@media(max-width:1400px){.kstrip{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:800px){.kstrip{grid-template-columns:repeat(2,1fr);}}
+
+.kcard{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:13px 16px;position:relative;overflow:hidden;transition:transform .15s;}
+.kcard:hover{transform:translateY(-2px);}
+.kcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--kc,var(--red));}
+.key{font-family:var(--fp);font-size:.64em;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+.knum{font-family:var(--fm);font-size:2.3em;font-weight:600;color:var(--kc,var(--red));line-height:1;margin-bottom:3px;}
+.klbl{font-size:.78em;color:var(--text);font-weight:500;line-height:1.3;}
+.ksub{font-size:.67em;color:var(--muted);margin-top:2px;}
+.kico{position:absolute;right:12px;top:10px;font-size:1.8em;opacity:.09;}
+
+/* ── CRITICAL BADGE ── (for homicide KPI) */
+.kcard.critica{
+  border-color:rgba(192,57,43,.4);
+  background:linear-gradient(135deg,rgba(139,0,0,.15),rgba(16,20,37,1));
+  box-shadow:0 0 20px rgba(192,57,43,.12),inset 0 0 30px rgba(139,0,0,.08);
+}
+.kcard.critica::before{background:linear-gradient(90deg,var(--red),var(--red-l));}
+
+/* ── GRIDS ── */
+.g21{display:grid;grid-template-columns:2fr 1fr;gap:11px;margin-bottom:11px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;margin-bottom:11px;}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:11px;margin-bottom:11px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:11px;}
+.g13{display:grid;grid-template-columns:1fr 3fr;gap:11px;margin-bottom:11px;}
+.g31{display:grid;grid-template-columns:3fr 1fr;gap:11px;margin-bottom:11px;}
+@media(max-width:1400px){.g21,.g3,.g4,.g13,.g31{grid-template-columns:1fr 1fr;}}
+@media(max-width:900px){.g21,.g2,.g3,.g4,.g13,.g31{grid-template-columns:1fr;}}
+
+/* ── CARD ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.card.alert-card{border-color:rgba(192,57,43,.35);background:linear-gradient(135deg,rgba(139,0,0,.1),var(--card));}
+.ch{padding:11px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.ch-l{display:flex;align-items:center;gap:8px;}
+.cey{font-family:var(--fp);font-size:.63em;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+.ctit{font-family:var(--fp);font-size:.98em;font-weight:700;color:#fff;letter-spacing:.02em;}
+.cbadge{padding:2px 9px;border-radius:4px;font-family:var(--fp);font-size:.66em;font-weight:700;letter-spacing:.06em;}
+.cb{padding:14px 16px;}
+.cw{position:relative;}
+
+/* ── HEATMAP DIA x HORA ── */
+.heatmap-grid{
+  display:grid;grid-template-columns:70px repeat(24,1fr);
+  gap:2px;padding:10px 16px 16px;font-family:var(--fm);
+}
+.hm-hlbl{font-size:.55em;color:var(--muted);text-align:center;padding:2px 0;}
+.hm-dlbl{font-size:.68em;color:var(--muted);display:flex;align-items:center;height:22px;}
+.hm-cell{
+  height:22px;border-radius:2px;cursor:default;position:relative;
+  transition:transform .1s;
+}
+.hm-cell:hover{transform:scale(1.15);z-index:10;}
+.hm-htip{
+  position:absolute;bottom:calc(100%+4px);left:50%;transform:translateX(-50%);
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:4px;padding:3px 8px;
+  font-family:var(--fm);font-size:.68em;color:var(--text);
+  white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .15s;z-index:50;
+}
+.hm-cell:hover .hm-htip{opacity:1;}
+.hm-legend{
+  display:flex;align-items:center;justify-content:flex-end;
+  gap:8px;padding:0 16px 8px;
+  font-size:.65em;color:var(--muted);
+}
+.hm-leg-bar{width:80px;height:8px;border-radius:4px;
+  background:linear-gradient(90deg,rgba(192,57,43,.1),rgba(192,57,43,1));}
+
+/* ── COMPARATIVO MEBAR ── */
+.comp-list{padding:8px 0;}
+.comp-row{display:flex;align-items:center;gap:9px;padding:5px 16px;transition:background .15s;}
+.comp-row:hover{background:rgba(255,255,255,.025);}
+.comp-tname{font-size:.8em;font-weight:500;color:var(--text);width:190px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.comp-bar-w{flex:1;height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;}
+.comp-bar{height:100%;border-radius:3px;transition:width .5s ease;}
+.comp-pct{font-family:var(--fm);font-size:.75em;font-weight:600;min-width:44px;text-align:right;flex-shrink:0;}
+.comp-abs{font-family:var(--fm);font-size:.7em;color:var(--muted);min-width:38px;text-align:right;flex-shrink:0;}
+
+/* ── HOMICIDIO PANEL ── */
+.hom-panel{
+  background:linear-gradient(135deg,rgba(139,0,0,.18),rgba(16,20,37,.95));
+  border:1px solid rgba(192,57,43,.4);
+  border-radius:8px;overflow:hidden;margin-bottom:11px;
+  box-shadow:0 0 30px rgba(192,57,43,.08);
+}
+.hom-header{
+  padding:13px 20px;
+  background:linear-gradient(90deg,rgba(139,0,0,.3),transparent);
+  border-bottom:1px solid rgba(192,57,43,.25);
+  display:flex;align-items:center;gap:12px;
+}
+.hom-title{font-family:var(--fp);font-size:1.1em;font-weight:800;color:var(--red-ll);letter-spacing:.06em;}
+.hom-subtitle{font-size:.72em;color:rgba(255,200,200,.6);margin-top:2px;}
+.hom-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(192,57,43,.15);}
+.hom-stat{background:rgba(7,8,15,.8);padding:14px 18px;text-align:center;}
+.hom-stat-n{font-family:var(--fm);font-size:2em;font-weight:600;color:var(--red-l);line-height:1;}
+.hom-stat-l{font-size:.7em;color:rgba(255,200,200,.5);margin-top:3px;font-family:var(--fp);letter-spacing:.06em;}
+.hom-charts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:rgba(192,57,43,.1);}
+.hom-chart{background:rgba(7,8,15,.7);padding:14px 16px;}
+.hom-chart-tit{font-family:var(--fp);font-size:.78em;font-weight:700;color:rgba(255,200,200,.5);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
+
+/* ── TIMELINE BARS (mini) ── */
+.mini-bars{display:flex;align-items:flex-end;gap:2px;height:50px;}
+.mini-bar{flex:1;border-radius:2px 2px 0 0;transition:height .4s;min-width:2px;position:relative;cursor:default;}
+.mini-bar:hover{filter:brightness(1.3);}
+
+/* ── CAI COMPARE ── */
+.cai-split{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+.cai-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px 16px;}
+.cai-name{font-family:var(--fp);font-size:1.1em;font-weight:800;color:#fff;margin-bottom:4px;}
+.cai-sub{font-size:.72em;color:var(--muted);margin-bottom:12px;}
+.cai-stat-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);}
+.cai-stat-row:last-child{border-bottom:none;}
+.cai-stat-label{font-size:.78em;color:var(--muted);}
+.cai-stat-val{font-family:var(--fm);font-size:.82em;color:var(--text);}
+
+/* ── ALERTAS ── */
+.agrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
+@media(max-width:1100px){.agrid{grid-template-columns:1fr 1fr;}}
+@media(max-width:700px){.agrid{grid-template-columns:1fr;}}
+.acard{border-radius:8px;padding:13px 15px;border-left:4px solid;position:relative;overflow:hidden;}
+.acard.r{background:var(--red-bg);border-color:var(--red);}
+.acard.o{background:var(--orange-bg);border-color:var(--orange);}
+.acard.y{background:var(--yellow-bg);border-color:var(--yellow);}
+.acard.v{background:rgba(125,60,152,.12);border-color:var(--violet);}
+.alev{font-family:var(--fp);font-size:.66em;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:3px;}
+.acard.r .alev{color:var(--red-l);}.acard.o .alev{color:var(--orange);}
+.acard.y .alev{color:var(--yellow);}.acard.v .alev{color:#b87ee8;}
+.atit{font-family:var(--fp);font-size:.98em;font-weight:700;color:#fff;margin-bottom:5px;line-height:1.2;}
+.abody{font-size:.76em;color:rgba(255,255,255,.6);line-height:1.5;}
+.amet{font-family:var(--fm);font-size:.88em;font-weight:600;margin-top:5px;}
+.acard.r .amet{color:var(--red-l);}.acard.o .amet{color:var(--orange);}
+.acard.y .amet{color:var(--yellow);}.acard.v .amet{color:#b87ee8;}
+.anum{position:absolute;right:12px;top:8px;font-family:var(--fm);font-size:2.2em;font-weight:700;opacity:.07;color:#fff;}
+
+/* ── RECOMENDACIONES ── */
+.rgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px;}
+@media(max-width:1400px){.rgrid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:800px){.rgrid{grid-template-columns:1fr 1fr;}}
+.rcard{background:var(--card);border:1px solid var(--border);border-top:3px solid var(--rc,var(--red));border-radius:8px;padding:13px 15px;}
+.rnum{font-family:var(--fm);font-size:.65em;color:var(--rc,var(--red));margin-bottom:5px;font-weight:600;}
+.rtit{font-family:var(--fp);font-size:.88em;font-weight:700;color:#fff;margin-bottom:5px;line-height:1.25;}
+.rbody{font-size:.75em;color:var(--muted);line-height:1.5;}
+.rtag{display:inline-block;margin-top:7px;padding:2px 8px;border-radius:4px;font-family:var(--fp);font-size:.63em;font-weight:700;letter-spacing:.06em;border:1px solid var(--rc,var(--red));color:var(--rc,var(--red));opacity:.8;}
+
+/* ── SECTION TITLE ── */
+.stit{font-family:var(--fp);font-size:1em;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:11px;display:flex;align-items:center;gap:10px;}
+.stit::after{content:'';flex:1;height:1px;background:var(--border);}
+.stit.crit{color:rgba(231,76,60,.6);}
+.stit.crit::before{content:'▲';color:var(--red-l);margin-right:4px;font-size:.9em;}
+
+/* ── HOUR BAR (simple) ── */
+.hbar-wrap{display:flex;align-items:flex-end;gap:1.5px;height:70px;padding:0 2px;}
+.hbar{flex:1;border-radius:2px 2px 0 0;position:relative;cursor:default;transition:filter .1s;}
+.hbar:hover{filter:brightness(1.3);}
+.hbar-tip{position:absolute;bottom:calc(100%+3px);left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--border2);border-radius:3px;padding:2px 6px;font-family:var(--fm);font-size:.68em;color:var(--text);white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .15s;z-index:20;}
+.hbar:hover .hbar-tip{opacity:1;}
+.hbar-xlbl{display:flex;gap:1.5px;padding:0 2px;}
+.hbar-xl{flex:1;font-family:var(--fm);font-size:.5em;color:var(--muted);text-align:center;}
+
+/* ── LISTA SIMPLE ── */
+.slist{padding:6px 0;}
+.srow{display:flex;align-items:center;gap:9px;padding:5px 16px;transition:background .15s;}
+.srow:hover{background:rgba(255,255,255,.025);}
+.srank{font-family:var(--fm);font-size:.7em;color:var(--dim);width:16px;text-align:right;flex-shrink:0;}
+.sname{flex:1;font-size:.8em;color:var(--text);}
+.sbarw{width:100px;height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;flex-shrink:0;}
+.sbarf{height:100%;border-radius:3px;transition:width .4s;}
+.scnt{font-family:var(--fm);font-size:.76em;min-width:38px;text-align:right;flex-shrink:0;}
+
+/* ── FOOTER ── */
+.footer{border-top:1px solid var(--border);padding:13px 28px;display:flex;justify-content:space-between;align-items:center;font-size:.72em;color:var(--muted);flex-wrap:wrap;gap:8px;}
+.footer b{color:var(--text);}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="tb-l">
+    <div class="tb-emblem">🎯</div>
+    <div>
+      <div class="tb-barrio">BARRIO <span>REBOLO</span></div>
+      <div class="tb-meta">Localidad Suroriente · Distrito 3 · Barranquilla · Estación San José</div>
+    </div>
+  </div>
+  <div class="tb-r">
+    <div class="tb-badge-crit"><div class="pdot"></div>ZONA PRIORIZADA</div>
+    <div class="tb-divv"></div>
+    <div class="tb-stat">
+      <div class="tb-stat-n" id="topN">574</div>
+      <div class="tb-stat-l">EVENTOS 2025</div>
+    </div>
+    <div class="tb-divv"></div>
+    <div class="tb-stat">
+      <div class="tb-stat-n" style="color:var(--red-ll)">5.8%</div>
+      <div class="tb-stat-l">DE HOMICIDIOS MEBAR</div>
+    </div>
+  </div>
+</div>
+
+<!-- ALERT BANNER -->
+<div class="banner">
+  <span class="banner-icon">⚠</span>
+  <strong>ALERTA CRÍTICA:</strong> Rebolo representa el 1.7% del total de delitos del MEBAR pero concentra el
+  <strong>5.8% de todos los homicidios dolosos</strong> del área metropolitana.
+  43 homicidios en 2025 — <strong>100% víctimas masculinas · 86% por sicariato · 95% arma de fuego.</strong>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filterbar">
+  <span class="fbl">Filtrar por:</span>
+  <select class="fbs" id="fT" onchange="applyAndRender()" style="min-width:200px">
+    <option value="-1">Todos los Delitos</option>
+  </select>
+  <span class="fbl">Semanas:</span>
+  <input type="range" class="fbr" id="fSS" min="1" max="52" value="1" oninput="upSem();applyAndRender()">
+  <span class="fbrv" id="lSS">1</span>
+  <span class="fbl">–</span>
+  <input type="range" class="fbr" id="fSE" min="1" max="52" value="52" oninput="upSem();applyAndRender()">
+  <span class="fbrv" id="lSE">52</span>
+  <button class="btn-rst" onclick="resetFilters()">↺ Restablecer</button>
+  <div class="fbcnt">Mostrando: <b id="fCnt">574</b> registros</div>
+</div>
+
+<div class="wrap">
+
+<!-- ═══ KPIs ═══ -->
+<div class="kstrip">
+  <div class="kcard critica"><div class="kico">💀</div><div class="key">Homicidios dolosos</div><div class="knum" id="kHom">43</div><div class="klbl">Homicidios en 2025</div><div class="ksub">5.8% del total MEBAR</div></div>
+  <div class="kcard" style="--kc:#e67e22"><div class="kico">👛</div><div class="key">Delito dominante</div><div class="knum" id="kD1n">206</div><div class="klbl" id="kD1l">HURTO PERSONAS</div><div class="ksub" id="kD1s">35.9% del total barrio</div></div>
+  <div class="kcard" style="--kc:#e74c3c"><div class="kico">🔫</div><div class="key">Arma predominante</div><div class="knum" id="kArn">36.6%</div><div class="klbl" id="kArl">ARMA DE FUEGO</div><div class="ksub" id="kArs">210 eventos con arma</div></div>
+  <div class="kcard" style="--kc:#9b59b6"><div class="kico">📅</div><div class="key">Día más peligroso</div><div class="knum" id="kDn">DOM</div><div class="klbl" id="kDl">Domingo · 88 eventos</div><div class="ksub" id="kDs">00:00 h pico máximo</div></div>
+  <div class="kcard" style="--kc:#2471a3"><div class="kico">👫</div><div class="key">Perfil víctima</div><div class="knum" id="kGn">58.4%</div><div class="klbl" id="kGl">MASCULINO</div><div class="ksub">Edad promedio: 35.2 años</div></div>
+  <div class="kcard" style="--kc:#d4ac0d"><div class="kico">📍</div><div class="key">Lugar del hecho</div><div class="knum" id="kSn">84.7%</div><div class="klbl">VÍAS PÚBLICAS</div><div class="ksub">486 de 574 eventos</div></div>
+</div>
+
+<!-- ═══ PANEL ROJO HOMICIDIOS ═══ -->
+<div class="stit crit">Análisis de Homicidios Dolosos · Zona de Máxima Alerta</div>
+<div class="hom-panel">
+  <div class="hom-header">
+    <div>
+      <div class="hom-title">🔴 43 HOMICIDIOS DOLOSOS · REBOLO 2025</div>
+      <div class="hom-subtitle">Barrio con tasa de homicidios desproporcionadamente alta vs el Área Metropolitana · Patrón de control territorial por grupos armados</div>
+    </div>
+  </div>
+  <div class="hom-stats">
+    <div class="hom-stat"><div class="hom-stat-n">100%</div><div class="hom-stat-l">Víctimas masculinas</div></div>
+    <div class="hom-stat"><div class="hom-stat-n">95%</div><div class="hom-stat-l">Arma de fuego</div></div>
+    <div class="hom-stat"><div class="hom-stat-n">86%</div><div class="hom-stat-l">Modalidad sicariato</div></div>
+    <div class="hom-stat"><div class="hom-stat-n">23:00</div><div class="hom-stat-l">Hora pico (9 casos)</div></div>
+  </div>
+  <div class="hom-charts">
+    <div class="hom-chart"><div class="hom-chart-tit">Distribución semanal</div><div class="cw" style="height:120px"><canvas id="cHomTrend"></canvas></div></div>
+    <div class="hom-chart"><div class="hom-chart-tit">Por día de la semana</div><div class="cw" style="height:120px"><canvas id="cHomDia"></canvas></div></div>
+    <div class="hom-chart"><div class="hom-chart-tit">Distribución horaria</div><div class="cw" style="height:120px"><canvas id="cHomHora"></canvas></div></div>
+  </div>
+</div>
+
+<!-- ═══ TENDENCIA + COMPARATIVO MEBAR ═══ -->
+<div class="g21">
+  <div class="card">
+    <div class="ch"><div><div class="cey">Análisis temporal · 52 semanas</div><div class="ctit">Tendencia Semanal de Delitos · Rebolo 2025</div></div><span class="cbadge" style="background:var(--red-bg);color:var(--red-l);border:1px solid rgba(192,57,43,.3)" id="trendBadge">Sem 1–52</span></div>
+    <div class="cb"><div class="cw" style="height:220px"><canvas id="cTrend"></canvas></div></div>
+  </div>
+  <div class="card">
+    <div class="ch"><div><div class="cey">Peso relativo en el área</div><div class="ctit">Rebolo vs MEBAR por Tipo de Delito</div></div><span class="cbadge" style="background:var(--red-bg);color:var(--red-l);border:1px solid rgba(192,57,43,.3)">% concentración</span></div>
+    <div class="comp-list" id="compList"></div>
+  </div>
+</div>
+
+<!-- ═══ HEATMAP DIA x HORA + DÍA ═══ -->
+<div class="g21">
+  <div class="card">
+    <div class="ch"><div><div class="cey">Matriz de riesgo territorial</div><div class="ctit">Mapa de Calor: Día × Hora (todos los delitos)</div></div><span class="cbadge" style="background:var(--red-bg);color:var(--red-l);border:1px solid rgba(192,57,43,.3)">574 eventos</span></div>
+    <div class="hm-legend"><span>Menor incidencia</span><div class="hm-leg-bar"></div><span>Mayor incidencia</span></div>
+    <div class="heatmap-grid" id="hmGrid"></div>
+  </div>
+  <div class="card">
+    <div class="ch"><div><div class="cey">Distribución temporal</div><div class="ctit">Delitos por Día de la Semana</div></div></div>
+    <div class="cb"><div class="cw" style="height:185px"><canvas id="cDia"></canvas></div></div>
+    <div style="border-top:1px solid var(--border);padding:10px 16px;">
+      <div class="cey" style="margin-bottom:6px">Distribución horaria 24h</div>
+      <div class="hbar-wrap" id="hbarWrap"></div>
+      <div class="hbar-xlbl" id="hbarXlbl"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PERFIL DEL DELITO ═══ -->
+<div class="stit">Perfil del Delito · Tipología y Modalidades</div>
+<div class="g3">
+  <div class="card">
+    <div class="ch"><div><div class="cey">Qué delito</div><div class="ctit">Tipo de Delito (TEMATICA)</div></div></div>
+    <div class="cb"><div class="cw" style="height:220px"><canvas id="cTema"></canvas></div></div>
+  </div>
+  <div class="card">
+    <div class="ch"><div><div class="cey">Cómo ocurre</div><div class="ctit">Modalidad Delictiva</div></div></div>
+    <div class="cb"><div class="cw" style="height:220px"><canvas id="cMod"></canvas></div></div>
+  </div>
+  <div class="card">
+    <div class="ch"><div><div class="cey">Con qué</div><div class="ctit">Armas Utilizadas</div></div></div>
+    <div class="cb"><div class="cw" style="height:220px"><canvas id="cArma"></canvas></div></div>
+  </div>
+</div>
+
+<!-- ═══ PERFIL VÍCTIMA + SITIO ═══ -->
+<div class="g4">
+  <div class="card">
+    <div class="ch"><div><div class="cey">Víctimas · Género</div><div class="ctit">Distribución por Género</div></div></div>
+    <div class="cb" style="display:flex;align-items:center;justify-content:center;"><div class="cw" style="height:180px;width:100%;max-width:220px"><canvas id="cGen"></canvas></div></div>
+  </div>
+  <div class="card">
+    <div class="ch"><div><div class="cey">Víctimas · Edad</div><div class="ctit">Rangos de Edad</div></div></div>
+    <div class="cb"><div class="cw" style="height:180px"><canvas id="cEdad"></canvas></div></div>
+  </div>
+  <div class="card">
+    <div class="ch"><div><div class="cey">Dónde ocurre</div><div class="ctit">Lugar del Hecho</div></div></div>
+    <div class="cb"><div class="cw" style="height:180px"><canvas id="cSit"></canvas></div></div>
+  </div>
+  <div class="card">
+    <div class="ch"><div><div class="cey">Cobertura territorial</div><div class="ctit">Por CAI Responsable</div></div></div>
+    <div class="slist" id="caiList"></div>
+  </div>
+</div>
+
+<!-- ═══ ALERTAS ═══ -->
+<div class="stit crit">Alertas Estratégicas · Rebolo</div>
+<div class="agrid" id="alertGrid"></div>
+
+<!-- ═══ RECOMENDACIONES ═══ -->
+<div class="stit">Recomendaciones de Política Pública · Rebolo</div>
+<div class="rgrid" id="recoGrid"></div>
+
+</div><!-- /wrap -->
+
+<div class="footer">
+  <div><b>VIRTUS GLOBAL / OSCC BARRANQUILLA</b> · Tablero Estratégico Barrio Rebolo · 2025</div>
+  <div>Fuente: SIEDCO-Policía Nacional · n=574 eventos Rebolo · Estación San José · CAI Cervecería / CAI Rebolo</div>
+  <div id="fTime"></div>
+</div>
+
+<script>
+/* ─── LOOKUP ─── */
+const L = {"temas":["DELITOS SEXUALES","EXTORSION","HOMICIDIO DOLOSO O INTENCIONAL","HURTO A BICICLETAS","HURTO A CABLE","HURTO AUTOMOTORES","HURTO CELULAR","HURTO COMERCIO","HURTO MOTOCICLETAS","HURTO PERSONAS","HURTO RESIDENCIAS","LESIONES AT","LESIONES PERSONALES","VIOLENCIA INTRAFAMILIAR"],"armas":["ARMA BLANCA / CORTOPUNZANTE","ARMA DE FUEGO","CARTA EXTORSIVA","CONTUNDENTES","DIRECTA","ESCOPOLAMINA","LLAMADA TELEFONICA","LLAVE MAESTRA","MOTO","NO REPORTADO","REDES SOCIALES","SIN EMPLEO DE ARMAS","VEHICULO"],"mods":["ACCIDENTE TRANSITO BICICLETA","ACCIDENTE TRANSITO MOTO","ACCIDENTE TRANSITO PEATON","AMENAZA/CHANTAJE","ATRACO","CIBER EXTORSION","CLASICA","COSQUILLEO","DEVOLUCION DE BIENES","ENGAÑO","EXTORSION GDO","FACTOR DE OPORTUNIDAD","FORCEJEO","HALADO","INTIMA","MENOR CUANTIA (MICRO EXTORSION)","NO REPORTADA","NO REPORTADO","POR AMIGO / CONOCIDO","RAPONAZO","RIÑA ENTRE COMPAÑEROS PERMANENTES","RIÑA ENTRE ESPOSOS","RIÑA ENTRE HERMANOS","RIÑA ENTRE HIJO-PADRE","RIÑA HIJO-MADRE","RIÑAS","ROMPIMIENTO DE VIDRIO","SICARIATO","VANDALISMO/SAQUEO","VENTOSA","VIOLACION DE CERRADURA"],"sits":["ALMACENES","APARTAMENTO","BAHIA","BUS MASIVO INTEGRAL DE OCCIDENTE M.I.O.","BUS MEGABUS","CAJERO AUTOMATICO","CALLEJÓN","CARRETERA","CARRIL EXCLUSIVO TRANSPORTE MASIVO","CASA DE LENOCINIO","CASAS DE HABITACION","CAÑOS","DENTRO DE LA VIVIENDA","EDIFICIO","ENTIDAD PUBLICA / ESTATAL","ESTABLECIMIENTO DE COMERCIO","ESTABLECIMIENTO DE GIROS","ESTABLECIMIENTO EDUCATIVO","ESTACIONES DE SERVICIO","FRENTE A COLEGIO - VIA PUBLICA","FRENTE CONJUNTO - VIA PUBLICA","FRENTE EMPRESA - VIA PUBLICA","IGLESIA","INTERIOR VEHICULO SERVICIO PUBLICO","LOCAL COMERCIAL","OTRO","PARADERO DE BUSES","PARQUEADERO","RODANDO SOBRE VIA - VIA PUBLICA","TRANSPORTE PÚBLICO","VIAS PUBLICAS"],"cais":["CAI BARRANQUILLITA","CAI CERVECERIA","CAI COCA COLA","CAI COOLECHERA","CAI LA ADUANA","CAI LAS FLORES","CAI LAS NIEVES","CAI PARQUE ALMENDRA","CAI REBOLO","CAI SAN PIO X","CAI SAN ROQUE","CAI SAN VICENTE","CAI SURI SALCEDO"]};
+const _T=0,_A=1,_MOD=2,_SIT=3,_CAI=4,_DIA=5,_H=6,_S=7,_G=8,_EB=9;
+const DIA_N=['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+const EDAD_L=['0–17 años','18–30 años','31–50 años','51+ años','Sin dato'];
+const GEN_L=['Masculino','Femenino','No reportado'];
+
+const TEMA_COLORS={
+  'HURTO PERSONAS':'#e67e22','HURTO CELULAR':'#f39c12',
+  'HOMICIDIO DOLOSO O INTENCIONAL':'#ff3333',
+  'VIOLENCIA INTRAFAMILIAR':'#2471a3','LESIONES PERSONALES':'#9b59b6',
+  'EXTORSION':'#00c9ff','HURTO MOTOCICLETAS':'#d35400',
+  'HURTO RESIDENCIAS':'#e74c3c','HURTO COMERCIO':'#c0392b',
+  'LESIONES AT':'#8e44ad','DELITOS SEXUALES':'#e91e63',
+  'HURTO A BICICLETAS':'#27ae60','HURTO AUTOMOTORES':'#922b21'
+};
+
+/* Pre-computed analytics */
+const DIA_HORA = [[10, 0, 5, 3, 1, 6, 7, 1, 3, 4, 5, 7, 0, 2, 1, 3, 3, 4, 2, 2, 3, 8, 3, 2], [5, 1, 4, 1, 3, 4, 4, 5, 5, 2, 4, 0, 0, 1, 6, 5, 0, 7, 2, 7, 5, 5, 4, 1], [10, 1, 6, 1, 0, 4, 1, 2, 1, 2, 4, 5, 0, 3, 1, 8, 3, 6, 3, 2, 1, 3, 5, 4], [5, 3, 0, 3, 2, 5, 7, 3, 3, 4, 0, 3, 3, 4, 1, 4, 5, 1, 2, 0, 6, 3, 6, 4], [8, 1, 2, 2, 2, 2, 5, 6, 2, 2, 3, 7, 0, 4, 3, 2, 6, 6, 4, 6, 3, 1, 3, 1], [7, 6, 1, 1, 4, 3, 3, 0, 3, 2, 2, 5, 2, 5, 5, 8, 2, 3, 5, 1, 5, 0, 7, 6], [8, 3, 4, 4, 2, 3, 7, 3, 3, 3, 2, 4, 0, 2, 6, 4, 2, 6, 1, 5, 4, 1, 4, 7]];
+const COMPARATIVO = {"DELITOS SEXUALES": {"reb": 8, "total": 696, "rate": 1.1}, "EXTORSION": {"reb": 15, "total": 1036, "rate": 1.4}, "HOMICIDIO DOLOSO O INTENCIONAL": {"reb": 43, "total": 745, "rate": 5.8}, "HURTO A BICICLETAS": {"reb": 1, "total": 52, "rate": 1.9}, "HURTO A CABLE": {"reb": 1, "total": 41, "rate": 2.4}, "HURTO AUTOMOTORES": {"reb": 2, "total": 600, "rate": 0.3}, "HURTO CELULAR": {"reb": 56, "total": 3335, "rate": 1.7}, "HURTO COMERCIO": {"reb": 7, "total": 904, "rate": 0.8}, "HURTO MOTOCICLETAS": {"reb": 13, "total": 1510, "rate": 0.9}, "HURTO PERSONAS": {"reb": 206, "total": 14523, "rate": 1.4}, "HURTO RESIDENCIAS": {"reb": 5, "total": 733, "rate": 0.7}, "LESIONES AT": {"reb": 14, "total": 1769, "rate": 0.8}, "LESIONES PERSONALES": {"reb": 89, "total": 2713, "rate": 3.3}, "VIOLENCIA INTRAFAMILIAR": {"reb": 114, "total": 4753, "rate": 2.4}};
+
+/* Populate filter */
+const fT=document.getElementById('fT');
+L.temas.forEach((t,i)=>{const o=document.createElement('option');o.value=i;o.textContent=t;fT.appendChild(o);});
+
+/* Chart defaults */
+Chart.defaults.color='rgba(208,216,245,.6)';
+Chart.defaults.borderColor='rgba(26,32,64,.8)';
+Chart.defaults.font.family='IBM Plex Mono, monospace';
+Chart.defaults.font.size=11;
+
+const CHARTS={};
+function mkChart(id,cfg){
+  if(CHARTS[id])CHARTS[id].destroy();
+  const c=document.getElementById(id);
+  if(!c)return;
+  CHARTS[id]=new Chart(c.getContext('2d'),cfg);
+  return CHARTS[id];
+}
+
+const TP_BASE={
+  plugins:{
+    legend:{display:false},
+    tooltip:{
+      backgroundColor:'rgba(12,15,28,.96)',borderColor:'#222a52',borderWidth:1,
+      titleFont:{family:'Barlow Condensed, sans-serif',weight:'700',size:13},
+      bodyFont:{family:'IBM Plex Mono, monospace',size:11},padding:10
+    }
+  },
+  scales:{
+    x:{grid:{color:'rgba(26,32,64,.7)'},ticks:{color:'rgba(208,216,245,.45)'}},
+    y:{grid:{color:'rgba(26,32,64,.7)'},ticks:{color:'rgba(208,216,245,.45)'}}
+  }
+};
+
+/* ─── FILTER STATE ─── */
+let fS={tema:-1,ss:1,se:52};
+function upSem(){
+  fS.ss=+document.getElementById('fSS').value;
+  fS.se=+document.getElementById('fSE').value;
+  document.getElementById('lSS').textContent=fS.ss;
+  document.getElementById('lSE').textContent=fS.se;
+}
+function resetFilters(){
+  document.getElementById('fT').value='-1';
+  document.getElementById('fSS').value=1;
+  document.getElementById('fSE').value=52;
+  fS={tema:-1,ss:1,se:52};
+  document.getElementById('lSS').textContent='1';
+  document.getElementById('lSE').textContent='52';
+  applyAndRender();
+}
+function applyAndRender(){
+  fS.tema=+document.getElementById('fT').value;
+  upSem();
+  render();
+}
+
+/* ─── HELPERS ─── */
+function cnt(arr){const m={};arr.forEach(v=>{m[v]=(m[v]||0)+1;});return m;}
+function topN(obj,n){return Object.entries(obj).sort((a,b)=>b[1]-a[1]).slice(0,n);}
+function fmt(n){return n>=1000?Math.round(n/100)/10+'k':String(n);}
+function pct(n,t){return t?Math.round(n/t*100)+'%':'—';}
+
+/* ─── MAIN RENDER ─── */
+function render(){
+  const ft=fS.tema,ss=fS.ss,se=fS.se;
+  const raw=DATA.filter(r=>(ft===-1||r[_T]===ft)&&r[_S]>=ss&&r[_S]<=se);
+  const N=raw.length;
+  document.getElementById('fCnt').textContent=N.toLocaleString('es-CO');
+  document.getElementById('topN').textContent=N.toLocaleString('es-CO');
+  document.getElementById('trendBadge').textContent=`Sem ${ss}–${se}`;
+
+  renderKPIs(raw,N);
+  renderHomPanel(raw,N);
+  renderTrend(raw,N,ss,se);
+  renderComparativo(N);
+  renderHeatmap(raw,N);
+  renderDia(raw,N);
+  renderHoras24(raw,N);
+  renderTema(raw,N);
+  renderMod(raw,N);
+  renderArma(raw,N);
+  renderGen(raw,N);
+  renderEdad(raw,N);
+  renderSitio(raw,N);
+  renderCAI(raw,N);
+  renderAlertas(raw,N);
+  renderRecos(raw,N);
+
+  document.getElementById('fTime').textContent='Actualizado: '+new Date().toLocaleTimeString('es-CO');
+}
+
+/* ─── KPIs ─── */
+function renderKPIs(d,N){
+  const homIdx=L.temas.indexOf('HOMICIDIO DOLOSO O INTENCIONAL');
+  const homN=d.filter(r=>r[_T]===homIdx).length;
+  document.getElementById('kHom').textContent=homN;
+
+  const tc=cnt(d.map(r=>r[_T]));
+  const tTop=topN(tc,1)[0];
+  if(tTop){
+    document.getElementById('kD1n').textContent=tTop[1];
+    document.getElementById('kD1l').textContent=L.temas[tTop[0]];
+    document.getElementById('kD1s').textContent=pct(tTop[1],N)+' del total barrio';
+  }
+
+  const ac=cnt(d.map(r=>r[_A]));
+  const aTop=topN(ac,1)[0];
+  if(aTop){
+    document.getElementById('kArn').textContent=pct(aTop[1],N);
+    document.getElementById('kArl').textContent=L.armas[aTop[0]];
+    document.getElementById('kArs').textContent=aTop[1]+' eventos';
+  }
+
+  const dc=cnt(d.map(r=>r[_DIA]));
+  const dTop=topN(dc,1)[0];
+  if(dTop){
+    document.getElementById('kDn').textContent=DIA_N[dTop[0]].slice(0,3).toUpperCase();
+    document.getElementById('kDl').textContent=DIA_N[dTop[0]]+' · '+dTop[1]+' eventos';
+  }
+
+  const gc=cnt(d.map(r=>r[_G]));
+  const gM=gc[0]||0,gF=gc[1]||0;
+  document.getElementById('kGn').textContent=pct(gM,gM+gF);
+  document.getElementById('kGl').textContent=gM>=gF?'MASCULINO':'FEMENINO';
+
+  const sc=cnt(d.map(r=>r[_SIT]));
+  const sTop=topN(sc,1)[0];
+  if(sTop) document.getElementById('kSn').textContent=pct(sTop[1],N);
+}
+
+/* ─── HOMICIDIO PANEL ─── */
+function renderHomPanel(d,N){
+  const homIdx=L.temas.indexOf('HOMICIDIO DOLOSO O INTENCIONAL');
+  const hom=d.filter(r=>r[_T]===homIdx);
+
+  // Trend semanas
+  const sems=Array.from({length:52},(_,i)=>i+1);
+  const homTrend=new Array(52).fill(0);
+  hom.forEach(r=>{if(r[_S]>=1&&r[_S]<=52)homTrend[r[_S]-1]++;});
+  mkChart('cHomTrend',{
+    type:'bar',
+    data:{labels:sems.map(s=>`S${s}`),datasets:[{data:homTrend,backgroundColor:'rgba(192,57,43,.7)',borderRadius:2,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{...TP_BASE.plugins.tooltip}},
+      scales:{x:{grid:{display:false},ticks:{color:'rgba(255,100,100,.3)',font:{size:7},maxTicksLimit:13}},
+              y:{grid:{color:'rgba(192,57,43,.1)'},ticks:{color:'rgba(255,100,100,.4)',font:{size:8}},beginAtZero:true}}
+    }
+  });
+
+  // Dia
+  const hDia=new Array(7).fill(0);
+  hom.forEach(r=>{if(r[_DIA]>=0&&r[_DIA]<7)hDia[r[_DIA]]++;});
+  const maxD=Math.max(...hDia);
+  mkChart('cHomDia',{
+    type:'bar',
+    data:{labels:DIA_N.map(d=>d.slice(0,3)),datasets:[{data:hDia,backgroundColor:hDia.map(v=>v===maxD?'rgba(231,76,60,.9)':'rgba(139,0,0,.5)'),borderRadius:3,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{...TP_BASE.plugins.tooltip,callbacks:{label:ctx=>`${ctx.parsed.y} homicidios`}}},
+      scales:{x:{grid:{display:false},ticks:{color:'rgba(255,150,150,.5)',font:{size:9}}},
+              y:{grid:{color:'rgba(192,57,43,.1)'},ticks:{color:'rgba(255,100,100,.4)',font:{size:8}},beginAtZero:true}}
+    }
+  });
+
+  // Horas
+  const hHora=new Array(24).fill(0);
+  hom.forEach(r=>{if(r[_H]>=0&&r[_H]<=23)hHora[r[_H]]++;});
+  const maxH=Math.max(...hHora);
+  mkChart('cHomHora',{
+    type:'bar',
+    data:{labels:Array.from({length:24},(_,h)=>h),datasets:[{data:hHora,backgroundColor:hHora.map(v=>v===maxH?'rgba(255,50,50,.9)':v>2?'rgba(192,57,43,.6)':'rgba(139,0,0,.35)'),borderRadius:2,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{...TP_BASE.plugins.tooltip,callbacks:{label:ctx=>`${ctx.parsed.y} hom. a las ${ctx.label}:00`}}},
+      scales:{x:{grid:{display:false},ticks:{color:'rgba(255,150,150,.4)',font:{size:8},maxTicksLimit:8}},
+              y:{grid:{color:'rgba(192,57,43,.1)'},ticks:{color:'rgba(255,100,100,.4)',font:{size:8}},beginAtZero:true}}
+    }
+  });
+}
+
+/* ─── TENDENCIA SEMANAL ─── */
+function renderTrend(d,N,ss,se){
+  const sems=[];
+  for(let s=ss;s<=se;s++)sems.push(s);
+  const total={};
+  sems.forEach(s=>total[s]=0);
+  d.forEach(r=>{if(total[r[_S]]!==undefined)total[r[_S]]++;});
+
+  // Top 3 temas
+  const tc=cnt(d.map(r=>r[_T]));
+  const top3=topN(tc,3).map(([i])=>+i);
+  const tColors=['#e74c3c','#e67e22','#2471a3'];
+
+  const datasets=[{
+    label:'Total',data:sems.map(s=>total[s]||0),
+    borderColor:'rgba(192,57,43,.6)',backgroundColor:'rgba(139,0,0,.1)',
+    fill:true,tension:.3,borderWidth:2,pointRadius:1.5,pointHoverRadius:4,
+  }];
+  top3.forEach((ti,idx)=>{
+    const wd={};
+    sems.forEach(s=>wd[s]=0);
+    d.filter(r=>r[_T]===ti).forEach(r=>{if(wd[r[_S]]!==undefined)wd[r[_S]]++;});
+    datasets.push({
+      label:L.temas[ti],data:sems.map(s=>wd[s]||0),
+      borderColor:tColors[idx],backgroundColor:'transparent',
+      fill:false,tension:.3,borderWidth:1.5,pointRadius:1,pointHoverRadius:3,
+      borderDash:idx===0?[]:[4,3],
+    });
+  });
+
+  mkChart('cTrend',{
+    type:'line',data:{labels:sems.map(s=>`S${s}`),datasets},
+    options:{...TP_BASE,responsive:true,maintainAspectRatio:false,
+      plugins:{
+        ...TP_BASE.plugins,
+        legend:{display:true,position:'top',labels:{color:'rgba(208,216,245,.6)',font:{size:10},boxWidth:12,padding:12}},
+        tooltip:{...TP_BASE.plugins.tooltip,mode:'index',intersect:false}
+      },
+      scales:{
+        x:{...TP_BASE.scales.x,ticks:{...TP_BASE.scales.x.ticks,maxTicksLimit:26,font:{size:9}}},
+        y:{...TP_BASE.scales.y,beginAtZero:true}
+      }
+    }
+  });
+}
+
+/* ─── COMPARATIVO MEBAR ─── */
+function renderComparativo(N){
+  const el=document.getElementById('compList');
+  const maxRate=Math.max(...Object.values(COMPARATIVO).map(v=>v.rate));
+  const sorted=Object.entries(COMPARATIVO).sort((a,b)=>b[1].rate-a[1].rate);
+
+  el.innerHTML=sorted.map(([t,v])=>{
+    const w=(v.rate/maxRate*100).toFixed(1);
+    const isCrit=v.rate>=5;
+    const isHigh=v.rate>=2&&!isCrit;
+    const color=isCrit?'var(--red-l)':isHigh?'var(--orange)':'var(--blue)';
+    const barColor=isCrit?'rgba(231,76,60,.8)':isHigh?'rgba(230,126,34,.7)':'rgba(36,113,163,.7)';
+    return `<div class="comp-row">
+      <span class="comp-tname" title="${t}">${t}</span>
+      <div class="comp-bar-w"><div class="comp-bar" style="width:${w}%;background:${barColor}"></div></div>
+      <span class="comp-pct" style="color:${color}">${v.rate}%</span>
+      <span class="comp-abs">${v.reb}/${v.total}</span>
+    </div>`;
+  }).join('');
+}
+
+/* ─── HEATMAP DIA x HORA ─── */
+function renderHeatmap(d,N){
+  // Use filtered data to rebuild matrix
+  const matrix=Array.from({length:7},()=>new Array(24).fill(0));
+  d.forEach(r=>{
+    if(r[_DIA]>=0&&r[_DIA]<7&&r[_H]>=0&&r[_H]<=23)
+      matrix[r[_DIA]][r[_H]]++;
+  });
+  const maxV=Math.max(...matrix.flat());
+
+  const el=document.getElementById('hmGrid');
+  // Build header row
+  let html='<div class="hm-dlbl"></div>';
+  for(let h=0;h<24;h++) html+=`<div class="hm-hlbl">${String(h).padStart(2,'0')}</div>`;
+
+  for(let d=0;d<7;d++){
+    html+=`<div class="hm-dlbl">${DIA_N[d].slice(0,3)}</div>`;
+    for(let h=0;h<24;h++){
+      const v=matrix[d][h];
+      const intensity=maxV>0?v/maxV:0;
+      const alpha=(0.05+intensity*0.95).toFixed(2);
+      const r=Math.round(192*intensity+30*(1-intensity));
+      const g=Math.round(57*intensity+35*(1-intensity));
+      const b=Math.round(43*intensity+80*(1-intensity));
+      html+=`<div class="hm-cell" style="background:rgba(${r},${g},${b},${alpha})">
+        <div class="hm-htip">${DIA_N[d].slice(0,3)} ${String(h).padStart(2,'0')}:00 · ${v}</div>
+      </div>`;
+    }
+  }
+  el.innerHTML=html;
+}
+
+/* ─── DÍA ─── */
+function renderDia(d,N){
+  const dc=new Array(7).fill(0);
+  d.forEach(r=>{if(r[_DIA]>=0&&r[_DIA]<7)dc[r[_DIA]]++;});
+  const mx=Math.max(...dc);
+  mkChart('cDia',{
+    type:'bar',
+    data:{labels:DIA_N,datasets:[{data:dc,backgroundColor:dc.map(v=>v===mx?'rgba(192,57,43,.85)':'rgba(36,113,163,.55)'),borderRadius:4,borderSkipped:false}]},
+    options:{...TP_BASE,responsive:true,maintainAspectRatio:false,
+      plugins:{...TP_BASE.plugins,tooltip:{...TP_BASE.plugins.tooltip,callbacks:{label:ctx=>`${ctx.parsed.y} eventos (${pct(ctx.parsed.y,N)})`}}},
+      scales:{x:{...TP_BASE.scales.x},y:{...TP_BASE.scales.y,beginAtZero:true}}
+    }
+  });
+}
+
+/* ─── HORAS 24H ─── */
+function renderHoras24(d,N){
+  const hc=new Array(24).fill(0);
+  d.forEach(r=>{if(r[_H]>=0&&r[_H]<=23)hc[r[_H]]++;});
+  const mx=Math.max(...hc);
+  const ww=document.getElementById('hbarWrap');
+  const xl=document.getElementById('hbarXlbl');
+  const fColors=['rgba(155,89,182,.8)','rgba(41,128,185,.8)','rgba(230,126,34,.8)','rgba(192,57,43,.85)'];
+  ww.innerHTML=hc.map((v,h)=>{
+    const ht=mx>0?(v/mx*100).toFixed(0):0;
+    const fi=h<6?0:h<12?1:h<18?2:3;
+    return `<div class="hbar" style="height:${ht}%;background:${fColors[fi]}">
+      <div class="hbar-tip">${String(h).padStart(2,'0')}:00 · ${v}</div>
+    </div>`;
+  }).join('');
+  xl.innerHTML=hc.map((_,h)=>`<div class="hbar-xl">${h%6===0?String(h).padStart(2,'0'):''}</div>`).join('');
+}
+
+/* ─── TIPO DELITO ─── */
+function renderTema(d,N){
+  const tc=cnt(d.map(r=>r[_T]));
+  const all=topN(tc,14);
+  const labels=all.map(([i])=>L.temas[i]);
+  const vals=all.map(([,v])=>v);
+  const colors=labels.map(l=>TEMA_COLORS[l]||'#4e5d82');
+  mkChart('cTema',{
+    type:'doughnut',
+    data:{labels,datasets:[{data:vals,backgroundColor:colors,borderWidth:2,borderColor:Array(colors.length).fill('#101425'),hoverOffset:7}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
+      plugins:{
+        legend:{display:true,position:'right',labels:{color:'rgba(208,216,245,.65)',font:{size:9.5},boxWidth:10,padding:7}},
+        tooltip:{...TP_BASE.plugins.tooltip,callbacks:{label:ctx=>`${ctx.label}: ${ctx.parsed} (${pct(ctx.parsed,N)})`}}
+      }
+    }
+  });
+}
+
+/* ─── MODALIDAD ─── */
+function renderMod(d,N){
+  const mc=cnt(d.map(r=>r[_MOD]));
+  const top=topN(mc,8);
+  const mColors=['rgba(192,57,43,.8)','rgba(139,0,0,.7)','rgba(231,76,60,.6)','rgba(230,126,34,.7)',
+                 'rgba(41,128,185,.7)','rgba(125,60,152,.7)','rgba(39,174,96,.6)','rgba(78,93,130,.6)'];
+  mkChart('cMod',{
+    type:'bar',
+    data:{labels:top.map(([i])=>L.mods[i]),datasets:[{data:top.map(([,v])=>v),backgroundColor:mColors,borderRadius:4,borderSkipped:false}]},
+    options:{...TP_BASE,responsive:true,maintainAspectRatio:false,indexAxis:'y',
+      plugins:{...TP_BASE.plugins,tooltip:{...TP_BASE.plugins.tooltip,callbacks:{label:ctx=>`${ctx.parsed.x} eventos (${pct(ctx.parsed.x,N)})`}}},
+      scales:{x:{...TP_BASE.scales.x,beginAtZero:true,ticks:{...TP_BASE.scales.x.ticks,font:{size:9}}},
+              y:{...TP_BASE.scales.y,ticks:{...TP_BASE.scales.y.ticks,font:{size:9}}}}
+    }
+  });
+}
+
+/* ─── ARMAS ─── */
+function renderArma(d,N){
+  const ac=cnt(d.map(r=>r[_A]));
+  const top=topN(ac,8);
+  const aColors=['rgba(255,51,51,.85)','rgba(230,126,34,.75)','rgba(241,196,15,.7)','rgba(39,174,96,.65)',
+                 'rgba(41,128,185,.65)','rgba(125,60,152,.65)','rgba(22,160,133,.6)','rgba(78,93,130,.55)'];
+  mkChart('cArma',{
+    type:'bar',
+    data:{labels:top.map(([i])=>L.armas[i]),datasets:[{data:top.map(([,v])=>v),backgroundColor:aColors,borderRadius:4,borderSkipped:false}]},
+    options:{...TP_BASE,responsive:true,maintainAspectRatio:false,indexAxis:'y',
+      plugins:{...TP_BASE.plugins,tooltip:{...TP_BASE.plugins.tooltip,callbacks:{label:ctx=>`${ctx.parsed.x} eventos (${pct(ctx.parsed.x,N)})`}}},
+      scales:{x:{...TP_BASE.scales.x,beginAtZero:true,ticks:{...TP_BASE.scales.x.ticks,font:{size:9}}},
+              y:{...TP_BASE.scales.y,ticks:{...TP_BASE.scales.y.ticks,font:{size:9}}}}
+    }
+  });
+}
+
+/* ─── GÉNERO ─── */
+function renderGen(d,N){
+  const gc=new Array(3).fill(0);
+  d.forEach(r=>{if(r[_G]>=0&&r[_G]<3)gc[r[_G]]++;});
+  mkChart('cGen',{
+    type:'doughnut',
+    data:{labels:GEN_L,datasets:[{data:gc,backgroundColor:['#2471a3','#e91e63','#4e5d82'],borderWidth:2,borderColor:'#101425',hoverOffset:5}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'65%',
+      plugins:{legend:{display:true,position:'bottom',labels:{color:'rgba(208,216,245,.65)',font:{size:10},boxWidth:11,padding:8}},
+        tooltip:{...TP_BASE.plugins.tooltip,callbacks:{label:ctx=>`${ctx.label}: ${ctx.parsed} (${pct(ctx.parsed,N)})`}}}}
+  });
+}
+
+/* ─── EDAD ─── */
+function renderEdad(d,N){
+  const ec=new Array(5).fill(0);
+  d.forEach(r=>{if(r[_EB]>=0&&r[_EB]<5)ec[r[_EB]]++;});
+  mkChart('cEdad',{
+    type:'bar',
+    data:{labels:EDAD_L,datasets:[{data:ec,backgroundColor:['rgba(22,160,133,.7)','rgba(230,126,34,.8)','rgba(192,57,43,.85)','rgba(125,60,152,.7)','rgba(78,93,130,.5)'],borderRadius:4,borderSkipped:false}]},
+    options:{...TP_BASE,responsive:true,maintainAspectRatio:false,
+      plugins:{...TP_BASE.plugins,tooltip:{...TP_BASE.plugins.tooltip,callbacks:{label:ctx=>`${ctx.parsed.y} víctimas (${pct(ctx.parsed.y,N)})`}}},
+      scales:{x:{...TP_BASE.scales.x},y:{...TP_BASE.scales.y,beginAtZero:true}}
+    }
+  });
+}
+
+/* ─── SITIO ─── */
+function renderSitio(d,N){
+  const sc=cnt(d.map(r=>r[_SIT]));
+  const top=topN(sc,7);
+  mkChart('cSit',{
+    type:'bar',
+    data:{labels:top.map(([i])=>L.sits[i]),datasets:[{data:top.map(([,v])=>v),backgroundColor:'rgba(36,113,163,.7)',borderRadius:3,borderSkipped:false}]},
+    options:{...TP_BASE,responsive:true,maintainAspectRatio:false,indexAxis:'y',
+      plugins:{...TP_BASE.plugins,tooltip:{...TP_BASE.plugins.tooltip,callbacks:{label:ctx=>`${ctx.parsed.x} (${pct(ctx.parsed.x,N)})`}}},
+      scales:{x:{...TP_BASE.scales.x,beginAtZero:true,ticks:{...TP_BASE.scales.x.ticks,font:{size:9}}},
+              y:{...TP_BASE.scales.y,ticks:{...TP_BASE.scales.y.ticks,font:{size:9}}}}
+    }
+  });
+}
+
+/* ─── CAI ─── */
+function renderCAI(d,N){
+  const cc=cnt(d.map(r=>r[_CAI]));
+  const top=topN(cc,6);
+  const mx=top.length?top[0][1]:1;
+  const el=document.getElementById('caiList');
+  const cColors=['rgba(192,57,43,.7)','rgba(231,76,60,.6)','rgba(230,126,34,.65)','rgba(41,128,185,.6)','rgba(125,60,152,.6)','rgba(39,174,96,.5)'];
+  el.innerHTML=top.map(([ci,cv],i)=>{
+    const w=(cv/mx*100).toFixed(1);
+    const name=L.cais[ci].replace('CAI ','');
+    return `<div class="srow">
+      <span class="srank">${i+1}</span>
+      <span class="sname">${name}</span>
+      <div class="sbarw"><div class="sbarf" style="width:${w}%;background:${cColors[i]}"></div></div>
+      <span class="scnt" style="color:${cColors[i]}">${cv}</span>
+    </div>`;
+  }).join('');
+}
+
+/* ─── ALERTAS ─── */
+function renderAlertas(d,N){
+  const homIdx=L.temas.indexOf('HOMICIDIO DOLOSO O INTENCIONAL');
+  const hpIdx=L.temas.indexOf('HURTO PERSONAS');
+  const vifIdx=L.temas.indexOf('VIOLENCIA INTRAFAMILIAR');
+  const lpIdx=L.temas.indexOf('LESIONES PERSONALES');
+
+  const homN=d.filter(r=>r[_T]===homIdx).length;
+  const hpN=d.filter(r=>r[_T]===hpIdx).length;
+  const vifN=d.filter(r=>r[_T]===vifIdx).length;
+  const sicN=d.filter(r=>r[_MOD]===L.mods.indexOf('SICARIATO')).length;
+  const afN=d.filter(r=>r[_A]===L.armas.indexOf('ARMA DE FUEGO')).length;
+
+  const alerts=[
+    {cls:'r',num:'01',lev:'🔴 ALERTA ROJA · HOMICIDIOS POR SICARIATO',
+     tit:`${homN} homicidios dolosos — 86% por sicariato`,
+     body:`Rebolo concentra el 5.8% de todos los homicidios del área metropolitana pese a ser solo el 1.7% de los registros totales. El 86% de las muertes es por sicariato (${sicN} casos), indicando presencia de estructura armada organizada con capacidad de ejecución. 100% de víctimas son hombres. Hora pico: 23:00.`,
+     met:`${homN} homicidios · ${pct(afN,N)} de casos con arma de fuego`},
+
+    {cls:'r',num:'02',lev:'🔴 ALERTA ROJA · HURTO EN VÍA PÚBLICA',
+     tit:`${hpN} hurtos a personas — modalidad ATRACO`,
+     body:`El ATRACO (216 casos, 37.6%) domina el perfil delictivo. Los sábados en horario de madrugada (00:00) concentran la mayor incidencia de hurto a personas. Las vías públicas son el escenario en el 84.7% de todos los eventos del barrio.`,
+     met:`${hpN} hurtos · ${pct(d.filter(r=>r[_T]===hpIdx&&r[_DIA]===5).length,hpN)} los sábados`},
+
+    {cls:'o',num:'03',lev:'🟠 ALERTA NARANJA · VIOLENCIA INTRAFAMILIAR',
+     tit:`${vifN} casos de VIF — 2do delito del barrio`,
+     body:`La violencia intrafamiliar representa el 19.9% de todos los delitos en Rebolo. El domingo (30 casos) y la madrugada son los picos de mayor incidencia. Requiere articulación inmediata con Comisaría de Familia, ICBF y Casas de Refugio de la localidad Suroriente.`,
+     met:`${vifN} casos VIF · ${pct(vifN,N)} del total Rebolo · Pico: Domingo 00:00`},
+
+    {cls:'o',num:'04',lev:'🟠 ALERTA NARANJA · LESIONES PERSONALES',
+     tit:`${lpN} lesiones personales — modalidad RIÑAS`,
+     body:`Las riñas (124 casos, 21.6% del total) concentran la violencia interpersonal no fatal. El domingo (23 casos) y horario nocturno (22:00-23:00) son los picos críticos. Indicador de baja cohesión social y posible regulación de conflictos por actores ilegales.`,
+     met:`${lpN} lesiones · 124 por riñas · Pico: Dom 22:00`},
+
+    {cls:'v',num:'05',lev:'🟣 ALERTA · CONTROL TERRITORIAL ARMADO',
+     tit:`Indicadores de presencia de estructura armada organizada`,
+     body:`La combinación de alta tasa de sicariatos (37 de 43 homicidios), arma de fuego predominante, vías públicas como escenario principal y patrón horario nocturno constante indica presencia de GAO con control territorial. Los CAI Cervecería (267 ev.) y Rebolo (249 ev.) registran cargas similares, evidenciando saturación operativa.`,
+     met:`37 sicariatos · 41 hom. con AF · Patrón nocturno sistémico`},
+
+    {cls:'y',num:'06',lev:'🟡 ALERTA AMARILLA · DELITOS SEXUALES',
+     tit:`${d.filter(r=>r[_T]===L.temas.indexOf('DELITOS SEXUALES')).length} delitos sexuales registrados`,
+     body:`Aunque en menor volumen (8 casos), la presencia de delitos sexuales en Rebolo requiere activación de la ruta de atención a víctimas con el Centro de Atención Integral (CAI) y la coordinación con la Fiscalía local. Alta probabilidad de subregistro por miedo a represalias de grupos armados.`,
+     met:`8 delitos sexuales · Subregistro probable · Ruta atención urgente`},
+  ];
+
+  document.getElementById('alertGrid').innerHTML=alerts.map(a=>`
+    <div class="acard ${a.cls}">
+      <div class="anum">${a.num}</div>
+      <div class="alev">${a.lev}</div>
+      <div class="atit">${a.tit}</div>
+      <div class="abody">${a.body}</div>
+      <div class="amet">${a.met}</div>
+    </div>`).join('');
+}
+
+/* ─── RECOMENDACIONES ─── */
+function renderRecos(d,N){
+  const homN=d.filter(r=>r[_T]===L.temas.indexOf('HOMICIDIO DOLOSO O INTENCIONAL')).length;
+  const hpN=d.filter(r=>r[_T]===L.temas.indexOf('HURTO PERSONAS')).length;
+  const vifN=d.filter(r=>r[_T]===L.temas.indexOf('VIOLENCIA INTRAFAMILIAR')).length;
+
+  const recos=[
+    {rc:'#e74c3c',num:'01',tag:'OPERATIVO ALTO IMPACTO',
+     tit:'Operativo permanente anti-sicariato en Rebolo',
+     body:`${homN} homicidios con 86% por sicariato exigen presencia permanente de SIJIN, GAULA y Fiscalía CTI. Instalar retenes de armas en ingresos al barrio. Solicitar declaratoria de zona de intervención prioritaria al Consejo de Seguridad Distrital. Implementar circuito cerrado de TV en cruces críticos.`},
+    {rc:'#ff5555',num:'02',tag:'INTELIGENCIA TERRITORIAL',
+     tit:'Desarticulación del GAO operante en Rebolo',
+     body:`El perfil de sicariato indica estructura armada consolidada. Activar red de informantes con protección garantizada. Coordinar con DIJIN para operación de inteligencia. Compartir con la Defensoría del Pueblo los patrones de desplazamiento y control identificados en el levantamiento PP8 ya disponible.`},
+    {rc:'#e67e22',num:'03',tag:'SEGURIDAD NOCTURNA',
+     tit:'Patrullaje intensivo 22:00–04:00 en vías públicas',
+     body:`El 23:00 concentra el pico de homicidios (9 casos) y el 00:00 el pico de hurtos (23 casos). Implementar patrullaje a pie y en moto en vías principales del barrio en esa franja. Coordinación con CAI Cervecería y CAI Rebolo para turnos de saturación nocturna los lunes, jueves y domingos.`},
+    {rc:'#2471a3',num:'04',tag:'PROTECCIÓN VIF',
+     tit:'Ruta de atención VIF urgente en Rebolo',
+     body:`${vifN} casos de VIF concentrados en domingos y madrugadas. Establecer puesto comunitario de atención a violencias de género en el barrio con operación los fines de semana. Capacitar a la JAC y líderes comunitarios en detección y ruta de denuncia. Articular con Comisaría de Familia localidad Suroriente.`},
+    {rc:'#9b59b6',num:'05',tag:'RECUPERACIÓN TERRITORIAL',
+     tit:'Plan integral de recuperación de Rebolo',
+     body:`Integrar los datos del tablero PP8-VIRTUS GLOBAL con el diagnóstico SIEDCO para elaborar un plan de intervención territorial coordinado entre Alcaldía Local, OSCC, Estación San José, Fiscalía y ICBF. Establecer Consejo de Seguridad Local mensual específico para Rebolo con metas medibles de reducción de homicidios (-30% en 6 meses).`},
+  ];
+
+  document.getElementById('recoGrid').innerHTML=recos.map(r=>`
+    <div class="rcard" style="--rc:${r.rc}">
+      <div class="rnum">RECOMENDACIÓN ${r.num}</div>
+      <div class="rtit">${r.tit}</div>
+      <div class="rbody">${r.body}</div>
+      <span class="rtag">${r.tag}</span>
+    </div>`).join('');
+}
+
+/* ─── DATA ─── */
+const DATA = [[9,1,4,30,1,2,2,27,1,3],[6,0,4,30,1,4,16,44,0,1],[6,0,4,30,1,4,16,44,0,1],[2,1,27,12,1,0,8,25,0,1],[2,1,25,12,1,0,11,34,0,1],[13,3,20,10,8,0,6,18,1,1],[13,3,25,30,1,0,13,29,0,4],[13,3,25,10,8,3,22,14,1,2],[13,3,25,30,8,0,5,39,1,1],[9,1,4,14,1,1,8,48,1,2],[9,1,4,24,8,4,11,7,0,2],[6,1,4,0,8,3,3,5,0,1],[9,11,11,0,8,4,6,9,1,1],[2,1,27,10,1,6,23,11,0,2],[9,1,4,30,8,5,4,19,1,2],[9,11,7,30,1,4,0,27,1,2],[9,1,4,30,8,4,1,8,1,2],[10,11,29,10,8,6,0,30,0,3],[10,11,29,10,8,1,7,35,0,2],[6,11,11,30,8,1,2,18,1,1],[6,1,4,30,1,2,2,27,1,3],[6,1,4,19,1,2,5,51,1,4],[6,1,4,4,1,3,1,47,1,3],[13,3,25,30,1,6,14,46,0,4],[13,11,25,30,8,6,15,47,0,1],[13,11,20,30,8,6,16,33,0,4],[13,11,17,5,8,0,0,46,1,2],[13,3,20,30,8,3,1,36,1,2],[13,11,24,30,1,3,4,36,1,2],[0,11,3,30,8,5,0,41,1,0],[0,0,3,30,1,6,4,47,1,1],[13,11,20,30,1,1,0,36,1,0],[13,3,25,30,8,2,0,31,1,2],[13,3,25,30,1,2,0,47,1,2],[13,11,25,30,1,2,2,43,1,2],[13,3,21,30,1,6,3,38,1,2],[13,3,25,30,1,6,3,22,1,4],[9,0,4,15,8,0,0,52,1,2],[9,1,4,30,1,6,0,28,1,2],[9,11,19,30,10,3,8,8,1,1],[9,1,4,0,8,5,8,43,1,1],[9,0,4,21,1,2,5,35,1,1],[9,9,4,30,8,2,3,34,1,1],[9,11,11,30,1,2,2,43,1,2],[9,1,4,4,1,3,1,47,1,3],[6,0,4,30,1,2,22,48,0,2],[6,1,4,30,1,3,22,28,0,2],[1,11,14,30,8,2,7,39,1,1],[9,11,11,30,1,2,15,12,1,2],[9,9,4,30,8,2,17,21,1,0],[13,11,17,30,8,2,17,37,1,2],[13,11,17,30,6,2,17,47,1,2],[13,11,20,30,6,5,15,42,1,3],[13,11,17,30,1,6,15,27,1,1],[13,11,20,30,8,6,17,42,1,4],[13,11,25,30,8,6,17,21,1,3],[12,11,17,30,3,1,20,47,1,1],[12,11,17,17,8,3,11,43,1,0],[9,1,4,30,8,1,0,9,1,1],[6,1,4,14,1,1,8,48,1,2],[6,11,11,0,8,4,6,9,1,1],[13,11,20,30,8,0,11,43,1,1],[13,0,25,30,8,1,15,36,0,2],[1,10,5,1,5,1,4,41,0,2],[9,11,19,9,7,3,3,31,0,2],[13,3,25,30,1,3,15,27,0,2],[10,11,30,10,8,2,10,46,0,1],[10,11,30,10,1,2,18,40,0,2],[9,1,4,0,8,3,3,5,0,1],[9,11,11,30,1,3,4,34,1,2],[9,1,4,29,1,3,6,48,1,1],[9,1,4,7,1,3,6,49,1,1],[9,0,4,19,10,5,6,33,1,1],[13,11,20,30,1,0,21,41,1,2],[13,11,25,30,1,2,19,20,1,4],[13,11,23,30,1,2,22,38,1,2],[13,11,20,30,1,2,23,51,1,2],[13,11,25,30,1,5,18,20,1,1],[13,11,17,30,1,6,19,37,1,1],[13,11,20,30,8,6,20,49,1,4],[6,1,4,7,1,3,5,50,0,2],[6,1,4,7,1,3,5,50,0,2],[6,1,4,7,1,3,5,50,0,2],[9,1,4,25,1,4,17,4,0,3],[13,3,20,30,8,2,21,51,0,2],[13,11,24,30,8,2,0,7,1,2],[13,11,25,30,1,2,1,7,1,3],[9,11,11,30,8,1,2,18,1,1],[12,3,25,30,8,6,0,32,1,3],[12,1,27,30,1,6,3,29,1,1],[9,1,4,8,1,2,16,26,1,2],[0,11,3,30,6,1,9,18,1,0],[12,11,25,30,1,1,8,52,1,3],[12,3,25,30,8,4,8,40,1,2],[12,3,25,30,6,6,10,33,1,2],[12,11,17,30,6,1,17,43,1,4],[12,11,17,30,6,1,17,43,1,1],[12,0,25,30,1,4,15,51,1,1],[9,11,11,30,6,3,7,24,1,1],[9,1,4,30,8,2,0,20,0,1],[9,1,4,30,1,2,0,48,0,3],[9,0,4,30,1,3,17,14,1,1],[9,1,4,30,1,4,17,9,1,2],[9,11,19,30,8,4,13,5,1,2],[9,9,4,30,8,5,14,25,1,1],[9,1,4,4,8,4,19,25,1,1],[9,11,11,1,8,1,2,35,0,2],[8,11,13,25,6,2,0,43,0,2],[13,11,17,30,8,5,15,16,0,4],[13,11,20,30,8,4,13,12,1,2],[0,11,3,30,1,1,19,13,1,0],[0,11,3,30,1,1,19,13,1,0],[13,3,25,30,8,6,18,47,1,2],[2,0,4,30,1,0,2,23,0,2],[2,1,4,30,1,0,2,21,0,2],[2,1,27,30,1,4,4,26,0,2],[2,1,27,30,1,5,0,26,0,0],[2,1,27,30,1,6,3,29,0,1],[8,7,13,27,2,1,9,38,0,2],[8,11,13,13,1,6,10,26,0,1],[8,11,13,30,8,0,0,47,1,4],[9,1,4,30,8,1,1,40,1,1],[9,1,4,30,1,1,3,36,1,1],[11,8,1,30,1,1,4,10,1,2],[9,1,4,28,8,1,7,48,1,1],[7,1,4,16,8,2,0,6,2,4],[9,1,4,30,8,5,1,8,1,2],[9,11,19,30,8,5,0,14,1,2],[13,3,25,30,8,5,0,27,1,1],[13,3,25,30,1,3,7,30,1,1],[13,11,17,30,1,3,7,36,1,4],[13,3,20,30,1,4,10,52,1,1],[13,3,20,30,8,4,7,51,1,1],[13,3,25,30,2,4,7,45,1,1],[13,3,20,30,8,4,11,33,1,2],[4,9,30,22,1,4,3,13,2,4],[9,1,4,30,6,0,5,4,1,1],[12,11,25,30,1,0,5,20,1,1],[9,1,4,19,1,2,5,51,1,4],[9,0,4,30,1,4,7,51,1,2],[9,3,4,30,0,0,17,3,1,1],[12,11,25,30,8,2,17,19,1,2],[13,11,20,30,1,2,18,7,1,1],[13,11,25,30,1,2,23,7,1,3],[13,3,25,30,8,3,23,11,1,1],[13,3,24,30,1,4,19,10,1,2],[13,11,25,30,6,4,21,2,1,3],[13,11,20,30,1,5,20,5,1,2],[12,1,27,30,8,0,21,30,0,2],[12,11,25,30,8,0,21,9,0,1],[12,1,25,30,8,0,21,11,0,1],[12,3,25,30,1,1,18,43,0,1],[12,3,25,30,8,1,19,22,0,4],[12,11,25,30,8,1,20,17,0,1],[12,3,25,30,1,1,18,43,1,2],[12,3,25,30,6,1,22,45,1,1],[12,3,25,30,1,3,22,45,1,1],[12,3,25,30,8,4,19,45,1,1],[12,3,25,30,8,4,19,45,1,0],[12,3,25,30,1,5,20,45,1,1],[12,0,25,30,8,5,22,31,1,2],[12,1,27,30,8,5,23,30,1,2],[12,0,25,30,1,6,23,37,1,1],[12,11,25,30,1,0,0,4,0,3],[12,3,25,30,8,6,0,32,0,4],[12,11,25,30,1,6,1,10,0,1],[12,11,25,30,1,6,1,10,0,1],[12,3,25,30,1,6,5,39,0,2],[12,3,25,30,8,0,10,46,0,1],[12,3,25,30,8,0,10,48,0,2],[12,3,25,30,8,2,7,37,0,2],[12,11,25,30,8,4,6,13,0,0],[12,0,25,30,8,6,6,32,0,2],[12,0,25,30,8,6,8,6,0,1],[12,1,27,30,1,6,8,26,0,2],[12,11,12,30,8,2,15,31,0,1],[12,3,25,30,1,2,16,45,0,3],[9,1,4,30,1,6,6,38,1,3],[6,0,4,30,8,0,11,4,1,2],[6,11,19,30,10,3,8,8,1,1],[6,0,4,30,1,4,7,51,1,2],[9,0,4,30,1,1,8,46,1,0],[9,1,4,30,1,6,6,41,1,2],[9,1,4,30,1,6,9,47,1,3],[9,1,4,30,1,6,11,30,1,1],[6,3,4,30,0,0,17,3,1,1],[6,9,4,30,8,2,17,21,1,0],[6,11,11,30,1,2,15,12,1,2],[13,11,25,30,8,2,0,12,1,2],[13,11,25,30,1,2,0,2,1,1],[13,11,20,30,8,3,5,7,1,2],[13,11,17,30,8,5,0,11,1,1],[9,0,4,30,8,0,11,4,1,2],[9,1,4,30,1,0,6,4,1,2],[13,3,20,30,1,0,8,19,1,2],[9,11,7,25,1,0,16,16,1,2],[2,1,27,10,8,3,13,5,0,1],[2,1,27,10,8,2,20,8,0,1],[13,3,25,30,8,1,2,29,0,2],[13,11,25,30,1,2,2,43,0,4],[13,11,25,30,1,2,2,43,0,4],[13,0,22,30,1,6,4,32,0,2],[6,1,4,30,8,0,9,40,0,1],[6,0,4,30,1,3,6,19,0,2],[6,1,4,30,8,6,7,26,0,2],[12,11,17,30,8,0,8,39,0,3],[12,11,17,30,8,0,10,46,0,4],[12,11,17,30,8,0,10,46,0,3],[13,3,22,30,0,0,7,32,0,2],[13,11,20,30,8,1,7,41,0,2],[13,3,25,30,6,2,9,11,0,2],[13,3,25,30,8,3,11,31,0,3],[13,3,25,30,8,4,6,23,0,3],[13,3,20,30,8,4,7,51,0,1],[13,3,25,30,6,4,8,42,0,2],[13,3,20,30,1,4,10,52,0,4],[13,11,17,30,8,5,10,36,0,4],[9,1,4,30,8,2,5,44,0,2],[9,1,4,7,1,3,5,50,0,2],[9,1,4,30,1,4,2,38,0,1],[9,11,11,30,6,4,0,43,0,3],[9,1,4,30,8,5,3,36,0,3],[9,1,4,30,8,5,5,42,0,1],[9,11,7,30,1,5,5,41,0,2],[9,0,4,30,8,6,2,31,0,4],[9,1,4,30,1,6,2,44,0,1],[9,1,4,18,1,1,6,10,0,1],[9,1,4,26,3,1,6,50,0,1],[9,1,4,6,8,1,7,40,0,1],[9,11,9,30,8,1,10,7,0,3],[9,11,7,3,10,5,14,35,0,3],[9,1,4,30,8,6,0,36,1,1],[13,11,17,30,8,0,2,9,1,2],[13,3,25,30,8,0,11,4,1,2],[13,3,20,30,1,5,10,6,1,2],[13,11,25,30,1,6,11,10,1,2],[13,11,20,30,1,6,11,10,1,2],[12,11,17,30,1,6,17,11,0,1],[13,3,25,30,8,6,15,7,0,3],[13,11,23,30,8,5,23,4,0,1],[12,3,25,30,1,4,10,11,1,2],[9,1,4,30,8,3,20,17,1,2],[9,11,11,30,8,3,20,24,1,0],[9,11,11,30,8,4,19,9,1,3],[9,1,4,30,10,0,2,12,0,2],[9,1,4,11,8,0,4,20,0,2],[9,1,4,30,8,0,0,17,0,2],[9,1,4,30,8,0,5,11,0,1],[9,0,4,30,1,1,4,18,0,2],[9,1,4,30,8,1,0,43,0,1],[9,1,4,6,8,1,5,23,0,2],[9,1,4,7,1,5,8,31,0,2],[9,1,4,6,1,5,11,29,0,2],[1,4,6,30,1,0,9,37,0,3],[1,4,6,30,1,0,9,37,0,3],[1,6,6,30,1,2,6,26,0,2],[12,1,27,30,1,6,14,14,1,2],[12,3,25,30,8,6,17,17,1,2],[12,11,25,30,8,0,21,9,1,2],[12,3,25,30,1,0,23,28,1,1],[12,3,25,30,8,1,19,22,1,3],[9,1,4,30,8,4,20,3,1,2],[12,1,27,30,1,6,23,3,1,1],[2,1,27,30,8,0,3,50,0,1],[2,1,27,30,1,0,5,42,0,2],[2,1,25,30,8,4,0,52,0,2],[2,1,27,30,1,3,8,45,0,1],[9,1,4,30,8,5,6,3,0,2],[9,11,11,30,1,6,6,4,0,2],[2,1,27,30,8,1,17,51,0,2],[9,1,4,30,8,5,18,40,0,1],[13,3,25,30,1,5,6,24,1,2],[13,3,22,30,8,6,8,33,1,3],[13,11,17,30,8,6,6,24,1,4],[13,3,25,30,1,0,15,46,1,1],[13,3,25,30,6,1,15,33,1,3],[13,3,25,30,8,1,14,39,1,1],[13,3,25,30,8,2,13,28,1,2],[13,3,20,30,1,5,14,38,1,2],[1,2,15,0,1,1,6,15,0,2],[7,11,30,22,1,4,3,13,2,4],[9,1,4,6,1,5,23,49,1,2],[9,1,4,30,1,0,5,23,0,1],[9,0,4,30,9,0,3,19,1,1],[9,1,4,30,1,0,0,21,1,1],[11,8,1,30,6,0,6,25,1,1],[0,11,17,30,6,4,9,32,1,4],[0,3,18,30,1,3,14,1,1,1],[8,1,4,30,8,6,17,40,1,3],[9,11,19,7,4,1,19,35,1,2],[9,11,7,30,8,3,0,25,0,1],[5,11,13,30,8,4,0,43,0,2],[8,11,13,30,3,4,0,38,0,2],[8,11,13,30,6,4,0,38,0,4],[9,11,19,6,10,4,11,17,1,1],[9,11,11,30,1,1,10,5,1,2],[9,11,7,4,1,1,17,18,1,1],[9,0,4,30,8,5,15,15,1,2],[9,11,11,30,8,4,0,8,0,2],[9,0,4,30,8,5,4,11,0,3],[9,1,4,30,8,5,1,8,0,2],[9,0,4,7,3,6,2,8,0,2],[9,1,4,30,1,6,0,4,0,2],[6,1,4,28,8,1,7,48,1,1],[6,1,4,29,1,3,6,48,1,1],[6,9,4,30,1,1,21,50,1,2],[9,0,4,30,8,0,19,30,1,2],[2,0,25,30,1,0,10,9,0,2],[2,1,27,30,1,2,11,11,0,1],[8,11,13,30,1,6,11,17,0,2],[2,1,27,30,8,1,14,30,0,2],[2,1,27,30,1,2,15,5,0,1],[2,1,27,30,1,3,12,31,0,1],[2,1,27,30,1,6,14,14,0,1],[13,3,20,30,1,0,0,18,1,1],[13,3,24,30,8,3,0,15,1,3],[13,3,25,30,8,4,0,14,1,1],[13,3,20,30,1,5,0,13,1,2],[13,3,25,30,8,6,1,16,1,2],[9,0,4,30,8,0,20,19,1,2],[9,1,4,30,8,1,21,15,1,1],[9,11,7,30,1,1,20,3,1,3],[9,11,17,30,6,3,20,3,1,2],[9,1,4,30,8,4,22,11,1,2],[9,11,11,30,1,6,22,4,1,2],[12,3,25,30,6,1,22,45,0,4],[12,3,25,30,6,1,22,45,0,4],[9,1,4,30,8,2,21,3,0,2],[12,0,4,30,1,2,22,48,0,2],[12,3,25,30,8,2,22,48,0,4],[12,3,25,30,8,2,23,24,0,2],[12,9,27,30,1,3,21,1,0,1],[12,1,27,30,1,6,23,3,0,1],[12,1,27,30,1,6,23,3,0,3],[12,1,27,30,1,6,23,3,0,2],[13,11,25,30,8,6,19,6,0,3],[13,11,25,30,8,6,19,6,0,1],[13,11,25,30,8,6,19,6,0,0],[11,12,0,30,1,3,6,18,0,2],[11,12,1,30,1,4,9,16,0,1],[11,8,1,30,1,6,6,39,0,1],[2,1,27,30,8,0,21,30,0,2],[2,1,27,30,8,0,22,26,0,1],[2,1,27,30,8,0,23,31,0,1],[2,1,27,30,1,0,21,25,0,2],[2,1,27,30,8,1,23,13,0,1],[2,1,27,30,1,2,23,16,0,0],[2,1,27,30,1,3,18,25,0,1],[2,1,27,30,8,3,18,27,0,2],[2,1,27,30,1,3,21,1,0,1],[2,1,27,30,8,3,23,34,0,1],[2,1,27,30,1,5,23,6,0,1],[2,1,27,30,1,5,23,6,0,3],[2,1,27,30,8,5,23,30,0,1],[2,1,27,30,1,6,23,3,0,1],[2,1,27,30,1,6,20,15,0,1],[8,9,4,30,8,5,22,16,0,3],[13,3,25,30,1,3,15,14,0,2],[13,3,25,30,8,4,13,21,0,2],[9,0,4,30,1,2,22,48,0,2],[9,1,4,30,12,2,21,50,0,4],[9,1,4,30,1,5,22,47,0,3],[1,6,6,30,8,0,0,39,2,4],[2,1,27,30,8,3,22,17,0,0],[2,1,27,30,1,4,18,15,0,1],[2,1,4,30,6,5,22,2,0,1],[9,1,4,30,1,4,18,4,0,2],[9,1,4,2,1,4,22,2,0,1],[9,0,4,30,1,0,22,21,0,1],[9,1,4,30,1,2,19,15,0,4],[9,11,16,30,1,3,20,19,0,2],[9,0,4,30,1,5,18,3,0,1],[9,1,4,30,8,5,18,12,0,2],[9,0,4,30,8,3,9,40,0,3],[9,1,4,30,8,5,11,37,0,3],[9,1,4,20,7,2,15,49,0,2],[9,1,4,30,1,4,16,40,0,2],[9,1,4,6,8,4,17,49,0,3],[11,8,1,30,1,3,21,4,0,0],[13,0,20,30,8,3,23,7,0,2],[11,12,1,30,1,6,20,32,0,2],[9,0,4,30,6,1,20,8,0,3],[9,1,4,30,8,1,21,9,0,2],[9,1,4,30,1,3,20,11,0,2],[9,1,4,30,1,3,20,26,0,2],[9,1,4,30,1,3,22,28,0,2],[9,0,4,30,8,4,23,3,0,3],[9,1,4,30,8,4,18,6,0,1],[9,0,4,30,8,5,22,21,0,4],[9,1,4,30,8,5,20,6,0,2],[9,1,4,30,1,5,22,9,0,2],[10,11,11,30,1,0,3,7,1,2],[9,0,4,30,1,0,17,35,0,2],[1,4,6,30,7,1,17,20,0,2],[9,1,4,30,8,2,15,37,0,1],[9,11,11,30,8,2,15,31,0,1],[9,0,4,30,8,3,13,50,0,2],[1,2,6,30,11,4,16,26,0,2],[9,0,4,30,1,4,16,44,0,1],[9,11,16,30,1,4,16,27,0,1],[1,2,6,30,1,5,15,3,0,3],[9,1,4,30,1,5,16,44,0,2],[9,11,11,30,1,5,15,45,0,4],[1,10,5,30,8,6,16,17,0,2],[9,1,4,30,8,0,20,25,0,1],[6,1,4,30,8,5,1,8,1,2],[6,11,19,6,10,4,11,17,1,1],[6,11,11,30,1,1,10,5,1,2],[6,11,7,4,1,1,17,18,1,1],[11,12,1,30,8,2,16,44,0,1],[11,12,0,30,1,5,13,25,0,2],[11,12,1,30,1,5,16,20,0,2],[11,12,1,30,8,0,21,6,0,2],[9,1,4,30,8,0,14,15,1,2],[9,1,4,30,6,1,14,17,1,2],[9,11,11,30,8,1,15,12,1,2],[12,0,25,30,8,1,15,4,1,4],[9,0,4,30,8,3,12,21,1,1],[9,0,4,30,8,3,16,3,1,2],[13,11,25,30,3,6,19,3,1,1],[13,11,25,30,1,6,22,4,1,1],[13,11,20,30,1,6,22,11,1,1],[9,1,4,30,1,1,0,5,0,1],[9,1,4,30,1,1,5,4,0,1],[9,1,4,30,8,3,0,2,0,2],[13,3,25,30,1,6,5,12,0,1],[11,8,1,30,6,0,6,25,0,1],[6,0,4,30,8,4,11,17,0,1],[6,0,4,30,1,6,9,18,0,1],[6,1,4,30,1,1,14,8,0,3],[6,1,4,30,8,4,14,15,0,1],[6,1,4,2,1,4,22,2,0,1],[6,0,4,30,1,0,22,21,0,1],[6,0,4,30,1,5,18,3,0,1],[9,1,4,30,8,5,20,13,0,1],[9,11,11,30,1,6,20,18,0,1],[12,1,27,30,1,5,12,26,0,1],[12,1,27,30,1,5,12,26,0,1],[12,1,25,30,1,5,17,10,0,1],[3,0,4,30,1,6,14,6,0,1],[9,0,4,30,1,6,14,6,0,1],[12,3,25,30,8,6,13,16,0,2],[12,1,27,30,1,6,14,14,0,2],[12,11,25,30,8,6,15,45,0,1],[9,11,19,30,1,4,15,15,1,1],[12,3,25,30,8,5,13,19,1,1],[12,3,25,30,1,0,18,14,1,2],[12,3,25,30,8,3,22,14,1,1],[12,3,25,30,8,4,18,16,1,2],[12,3,25,30,10,4,20,14,1,2],[12,11,25,30,1,6,2,7,0,1],[12,1,27,30,1,1,8,22,0,1],[12,11,25,30,1,2,8,12,0,2],[12,11,25,30,8,2,11,10,0,3],[12,3,25,30,3,4,11,8,0,2],[12,0,25,30,8,3,13,1,0,2],[12,11,25,30,1,3,13,4,0,2],[12,3,25,30,1,3,16,5,0,2],[12,3,25,30,1,3,16,5,0,1],[12,3,25,30,8,4,14,14,0,2],[12,1,27,30,1,5,13,2,0,1],[12,3,25,30,1,5,15,7,0,0],[12,3,25,30,1,5,15,7,0,1],[12,0,25,30,1,2,18,3,0,2],[12,3,25,30,1,4,20,13,0,3],[12,1,27,30,8,6,22,10,0,1],[13,1,20,30,8,0,15,19,1,1],[13,3,25,30,1,3,23,15,1,1],[9,11,7,30,3,0,0,19,1,2],[13,11,25,30,1,0,6,16,1,2],[13,11,25,30,8,0,11,8,1,1],[11,8,1,30,8,4,7,9,1,2],[13,11,20,30,1,6,6,18,1,2],[11,8,2,30,1,3,15,18,1,0],[13,11,25,30,8,5,14,8,1,1],[13,11,25,30,1,0,18,6,1,1],[13,3,23,30,8,6,17,23,0,2],[13,3,25,30,8,6,21,19,0,2],[8,11,13,30,1,0,11,8,1,1],[13,11,24,30,1,2,10,22,1,2],[0,3,18,30,8,2,14,10,1,0],[8,11,13,30,8,3,0,7,0,2],[13,3,20,30,1,6,5,17,0,2],[5,1,4,30,1,2,10,12,0,2],[8,11,13,30,8,5,9,8,0,2],[13,3,25,30,8,6,7,19,0,2],[9,1,4,7,8,4,4,18,0,3],[9,1,4,30,6,4,5,5,0,2],[9,1,4,30,1,4,5,25,0,1],[8,1,4,30,8,5,4,12,0,2],[9,1,4,30,1,5,0,8,0,1],[9,1,4,30,8,5,1,11,0,1],[9,1,4,30,8,5,1,11,0,1],[9,1,4,30,8,5,2,9,0,2],[9,1,4,19,8,2,11,19,0,3],[9,1,4,30,8,3,9,25,0,3],[9,1,4,7,1,4,6,24,0,1],[9,1,4,7,8,5,9,18,0,2],[9,1,4,6,1,5,11,29,0,2],[9,11,9,30,1,1,10,27,0,4],[9,11,16,30,8,2,10,21,0,3],[13,11,25,30,8,2,11,14,0,1],[9,0,4,30,1,3,6,19,0,2],[9,1,4,30,6,3,6,11,0,2],[13,11,23,30,8,3,11,6,0,3],[9,1,4,30,1,5,11,29,0,2],[9,1,4,30,8,6,7,26,0,2],[9,1,4,30,8,5,17,19,0,1],[9,1,4,7,1,5,13,22,0,1],[9,11,7,30,1,0,16,24,0,1],[9,11,9,30,1,0,15,28,0,4],[9,0,4,30,1,1,15,5,0,2],[9,11,7,30,1,1,14,18,0,1],[9,11,19,30,8,2,13,6,0,2],[13,11,25,30,8,3,15,14,0,3],[9,11,19,30,1,4,17,6,0,3],[9,1,4,30,1,6,13,20,0,2],[9,1,4,7,1,5,22,10,0,1],[6,0,4,30,8,3,12,21,1,1],[6,0,4,30,8,0,20,19,1,2],[6,0,4,30,8,5,4,11,0,3],[6,1,4,30,8,5,1,8,0,2],[6,1,4,30,1,6,0,4,0,2],[9,5,4,30,1,2,15,42,1,3],[9,11,7,30,1,5,14,44,1,3],[6,1,4,4,8,4,19,25,1,1],[9,1,4,30,1,5,19,32,1,3],[6,1,4,30,10,0,2,12,0,2],[6,1,4,30,1,1,0,5,0,1],[6,1,4,6,8,1,5,23,0,2],[6,1,4,6,8,1,5,23,0,2],[9,0,4,30,8,0,0,38,0,3],[9,9,4,30,1,1,21,50,1,2],[6,1,4,19,8,2,11,19,0,3],[6,1,4,7,1,5,8,31,0,2],[9,1,4,30,8,0,9,40,0,1],[6,1,4,30,8,5,17,19,0,1],[6,1,4,7,1,5,13,22,0,1],[6,11,7,30,1,0,16,24,0,1],[6,11,19,30,8,2,13,6,0,2],[6,11,19,30,1,4,17,6,0,3],[9,1,4,30,1,0,19,47,0,2],[9,1,4,6,8,1,19,46,0,2],[9,1,4,6,8,1,19,46,0,2],[6,0,4,30,6,1,20,8,0,3],[6,1,4,30,8,1,21,9,0,2],[9,1,4,30,8,2,0,5,0,2],[9,11,19,30,1,3,0,9,0,1],[9,0,4,30,8,4,11,17,0,1],[9,0,4,30,1,6,9,18,0,1],[9,1,4,30,8,0,17,22,0,1],[9,11,11,30,8,0,13,4,0,3],[9,11,26,30,1,6,0,19,0,2],[9,0,4,6,6,0,6,3,0,2],[9,1,4,30,1,0,6,12,0,2],[9,0,4,30,8,2,9,16,0,2],[9,1,4,30,1,3,9,16,0,1],[9,1,4,30,1,1,14,8,0,3],[9,1,4,30,8,4,13,15,0,1],[9,1,4,30,8,4,14,15,0,1],[9,0,4,26,1,5,15,9,0,4],[2,1,27,30,8,1,6,8,0,1],[2,1,27,23,1,1,17,20,0,2],[2,1,27,30,8,2,17,3,0,1],[2,1,27,30,8,3,16,19,0,1],[7,1,4,30,1,5,5,3,2,4],[7,11,11,30,8,1,13,24,2,4],[7,11,11,30,1,3,16,41,2,4],[1,4,6,30,8,4,17,9,2,4],[1,10,5,30,8,3,9,5,1,1],[1,4,10,30,1,1,22,10,1,1],[1,11,8,30,8,5,11,7,0,3],[7,3,28,30,8,4,2,11,2,4],[7,1,4,30,1,5,20,8,2,4]];
+
+/* ─── BOOT ─── */
+document.getElementById('fTime').textContent='Cargado: '+new Date().toLocaleTimeString('es-CO');
+const lpN=574*89/574; // placeholder, overridden by render
+render();
+</script>
+</body>
+</html>
