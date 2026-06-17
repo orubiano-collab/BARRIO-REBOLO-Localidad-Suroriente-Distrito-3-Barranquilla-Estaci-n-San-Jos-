@@ -8,15 +8,20 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
 :root{
-  --bg:#07080f;--surface:#0c0f1c;--card:#101425;--border:#1a2040;--border2:#222a52;
-  --text:#d0d8f5;--muted:#4e5d82;--dim:#2e3a5c;
-  --red:#c0392b;--red-l:#e74c3c;--red-ll:#ff5555;--red-bg:rgba(192,57,43,.15);
+  /* ── Nueva identidad visual 2025 ── */
+  --navy:#002855;--navy2:#001a3d;--cobalt:#0057A8;--cobalt-bg:rgba(0,87,168,.1);--cobalt-brd:rgba(0,87,168,.3);
+  --gold:#C8A84B;--gold-l:#e8c96d;--gold-bg:rgba(200,168,75,.12);--gold-brd:rgba(200,168,75,.3);
+  /* Cuerpo: fondo gris claro, tarjetas blancas */
+  --bg:#F4F4F4;--surface:#FFFFFF;--card:#FFFFFF;--border:#DDE1E7;--border2:#C8CDD6;
+  --text:#1A2840;--muted:#6B7A90;--dim:#A0AABB;
+  /* Semántica de colores */
+  --red:#C0392B;--red-l:#e74c3c;--red-ll:#ff5555;--red-bg:rgba(192,57,43,.10);
   --crimson:#8b0000;--blood:#ff0000;
-  --orange:#e67e22;--orange-bg:rgba(230,126,34,.12);
+  --orange:#E06B1A;--orange-bg:rgba(224,107,26,.12);
   --yellow:#f1c40f;--yellow-bg:rgba(241,196,15,.1);
-  --green:#27ae60;--green-bg:rgba(39,174,96,.1);
-  --blue:#2471a3;--cyan:#00c9ff;--violet:#7d3c98;
-  --gold:#d4ac0d;--gold-bg:rgba(212,172,13,.1);
+  --green:#1A7A4A;--green-bg:rgba(26,122,74,.10);
+  --blue:#0057A8;--cyan:#0099CC;--violet:#6B3F9E;
+  --gold-old:#d4ac0d;--gold-old-bg:rgba(212,172,13,.1);
   --fp:'Barlow Condensed',sans-serif;
   --fb:'Barlow',sans-serif;
   --fm:'IBM Plex Mono',monospace;
@@ -27,61 +32,61 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px
 
 /* ── TOPBAR ── */
 .topbar{
-  background:linear-gradient(135deg,#050508 0%,#0c0f1c 60%,#14091a 100%);
-  border-bottom:2px solid var(--red);
+  background:linear-gradient(135deg,var(--navy2) 0%,var(--navy) 60%,var(--cobalt) 100%);
+  border-bottom:3px solid var(--gold);
   padding:0 28px;display:flex;align-items:center;justify-content:space-between;
   height:64px;position:sticky;top:0;z-index:200;
 }
 .tb-l{display:flex;align-items:center;gap:16px;}
 .tb-emblem{
   width:44px;height:44px;flex-shrink:0;
-  background:radial-gradient(circle at 40% 35%,#8b0000,#c0392b 60%,#7d0000);
+  background:var(--cobalt);
   clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
   display:flex;align-items:center;justify-content:center;
-  font-size:1.3em;box-shadow:0 0 18px rgba(192,57,43,.4);
+  font-size:1.3em;box-shadow:0 0 18px rgba(0,87,168,.4);
 }
 .tb-barrio{font-family:var(--fp);font-weight:900;font-size:1.8em;letter-spacing:.06em;color:#fff;line-height:1;}
-.tb-barrio span{color:var(--red-l);}
-.tb-meta{font-size:.7em;color:var(--muted);letter-spacing:.04em;margin-top:2px;}
+.tb-barrio span{color:var(--gold-l);}
+.tb-meta{font-size:.7em;color:rgba(255,255,255,.6);letter-spacing:.04em;margin-top:2px;}
 .tb-r{display:flex;align-items:center;gap:18px;}
 .tb-badge-crit{
   padding:5px 14px;border-radius:4px;
   font-family:var(--fp);font-size:.82em;font-weight:800;letter-spacing:.1em;
-  background:var(--red-bg);border:1px solid rgba(192,57,43,.5);color:var(--red-ll);
+  background:rgba(255,255,255,.1);border:1px solid var(--gold-brd);color:var(--gold-l);
   display:flex;align-items:center;gap:7px;
-  box-shadow:0 0 12px rgba(192,57,43,.15);
+  box-shadow:0 0 12px rgba(200,168,75,.15);
 }
-.pdot{width:8px;height:8px;border-radius:50%;background:var(--red-ll);animation:pd 1.5s infinite;}
-@keyframes pd{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(231,76,60,.5);}50%{opacity:.5;box-shadow:0 0 0 5px rgba(231,76,60,0);}}
+.pdot{width:8px;height:8px;border-radius:50%;background:var(--gold-l);animation:pd 1.5s infinite;}
+@keyframes pd{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(232,201,109,.5);}50%{opacity:.5;box-shadow:0 0 0 5px rgba(232,201,109,0);}}
 .tb-stat{text-align:right;}
-.tb-stat-n{font-family:var(--fm);font-size:1.3em;font-weight:600;color:var(--red-l);line-height:1;}
-.tb-stat-l{font-size:.65em;color:var(--muted);letter-spacing:.04em;}
-.tb-divv{width:1px;height:30px;background:var(--border2);}
+.tb-stat-n{font-family:var(--fm);font-size:1.3em;font-weight:600;color:var(--gold-l);line-height:1;}
+.tb-stat-l{font-size:.65em;color:rgba(255,255,255,.6);letter-spacing:.04em;}
+.tb-divv{width:1px;height:30px;background:rgba(255,255,255,.2);}
 
 /* ── ALERT BANNER ── */
 .banner{
-  background:linear-gradient(90deg,rgba(139,0,0,.3),rgba(192,57,43,.12),rgba(139,0,0,.05));
-  border-bottom:1px solid rgba(192,57,43,.25);
-  padding:7px 28px;display:flex;align-items:center;gap:14px;font-size:.78em;color:rgba(255,200,200,.7);
+  background:linear-gradient(90deg,rgba(192,57,43,.1),rgba(192,57,43,.04),transparent);
+  border-bottom:1px solid rgba(192,57,43,.2);
+  padding:7px 28px;display:flex;align-items:center;gap:14px;font-size:.78em;color:var(--red);
 }
-.banner strong{color:var(--red-l);}
+.banner strong{color:var(--red);}
 .banner-icon{font-size:1.1em;}
 
 /* ── FILTER BAR ── */
 .filterbar{
   background:var(--surface);border-bottom:1px solid var(--border);
   padding:8px 28px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
-  position:sticky;top:64px;z-index:199;
+  position:sticky;top:64px;z-index:199;box-shadow:0 2px 8px rgba(0,0,0,.06);
 }
 .fbl{font-family:var(--fp);font-size:.72em;font-weight:700;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;white-space:nowrap;}
-.fbs{background:var(--card);border:1px solid var(--border2);border-radius:4px;color:var(--text);font-family:var(--fb);font-size:.82em;padding:5px 10px;cursor:pointer;}
-.fbs:focus{outline:none;border-color:var(--red);}
-.fbr{accent-color:var(--red);width:90px;cursor:pointer;}
-.fbrv{font-family:var(--fm);font-size:.78em;color:var(--red-l);min-width:20px;text-align:center;}
+.fbs{background:var(--bg);border:1px solid var(--border2);border-radius:4px;color:var(--text);font-family:var(--fb);font-size:.82em;padding:5px 10px;cursor:pointer;}
+.fbs:focus{outline:none;border-color:var(--cobalt);}
+.fbr{accent-color:var(--cobalt);width:90px;cursor:pointer;}
+.fbrv{font-family:var(--fm);font-size:.78em;color:var(--cobalt);min-width:20px;text-align:center;}
 .btn-rst{padding:5px 14px;background:transparent;border:1px solid var(--border2);border-radius:4px;color:var(--muted);font-family:var(--fp);font-size:.78em;font-weight:700;letter-spacing:.06em;cursor:pointer;transition:all .2s;}
-.btn-rst:hover{border-color:var(--red);color:var(--red-l);}
+.btn-rst:hover{border-color:var(--cobalt);color:var(--cobalt);}
 .fbcnt{margin-left:auto;font-family:var(--fm);font-size:.8em;color:var(--muted);}
-.fbcnt b{color:var(--red-l);}
+.fbcnt b{color:var(--cobalt);}
 
 /* ── WRAP ── */
 .wrap{max-width:1920px;margin:0 auto;padding:14px 28px 48px;}
@@ -91,20 +96,20 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px
 @media(max-width:1400px){.kstrip{grid-template-columns:repeat(3,1fr);}}
 @media(max-width:800px){.kstrip{grid-template-columns:repeat(2,1fr);}}
 
-.kcard{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:13px 16px;position:relative;overflow:hidden;transition:transform .15s;}
+.kcard{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:13px 16px;position:relative;overflow:hidden;transition:transform .15s;box-shadow:0 1px 4px rgba(0,0,0,.07);}
 .kcard:hover{transform:translateY(-2px);}
-.kcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--kc,var(--red));}
+.kcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--kc,var(--cobalt));}
 .key{font-family:var(--fp);font-size:.64em;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
-.knum{font-family:var(--fm);font-size:2.3em;font-weight:600;color:var(--kc,var(--red));line-height:1;margin-bottom:3px;}
+.knum{font-family:var(--fm);font-size:2.3em;font-weight:600;color:var(--kc,var(--cobalt));line-height:1;margin-bottom:3px;}
 .klbl{font-size:.78em;color:var(--text);font-weight:500;line-height:1.3;}
 .ksub{font-size:.67em;color:var(--muted);margin-top:2px;}
 .kico{position:absolute;right:12px;top:10px;font-size:1.8em;opacity:.09;}
 
 /* ── CRITICAL BADGE ── (for homicide KPI) */
 .kcard.critica{
-  border-color:rgba(192,57,43,.4);
-  background:linear-gradient(135deg,rgba(139,0,0,.15),rgba(16,20,37,1));
-  box-shadow:0 0 20px rgba(192,57,43,.12),inset 0 0 30px rgba(139,0,0,.08);
+  border-color:rgba(192,57,43,.35);
+  background:linear-gradient(135deg,rgba(192,57,43,.06),var(--card) 55%);
+  box-shadow:0 1px 4px rgba(0,0,0,.07);
 }
 .kcard.critica::before{background:linear-gradient(90deg,var(--red),var(--red-l));}
 
@@ -119,12 +124,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px
 @media(max-width:900px){.g21,.g2,.g3,.g4,.g13,.g31{grid-template-columns:1fr;}}
 
 /* ── CARD ── */
-.card{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
-.card.alert-card{border-color:rgba(192,57,43,.35);background:linear-gradient(135deg,rgba(139,0,0,.1),var(--card));}
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.07);}
+.card.alert-card{border-color:rgba(192,57,43,.3);background:linear-gradient(135deg,rgba(192,57,43,.05),var(--card) 55%);}
 .ch{padding:11px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;}
 .ch-l{display:flex;align-items:center;gap:8px;}
 .cey{font-family:var(--fp);font-size:.63em;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
-.ctit{font-family:var(--fp);font-size:.98em;font-weight:700;color:#fff;letter-spacing:.02em;}
+.ctit{font-family:var(--fp);font-size:.98em;font-weight:700;color:var(--navy);letter-spacing:.02em;}
 .cbadge{padding:2px 9px;border-radius:4px;font-family:var(--fp);font-size:.66em;font-weight:700;letter-spacing:.06em;}
 .cb{padding:14px 16px;}
 .cw{position:relative;}
@@ -143,9 +148,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px
 .hm-cell:hover{transform:scale(1.15);z-index:10;}
 .hm-htip{
   position:absolute;bottom:calc(100%+4px);left:50%;transform:translateX(-50%);
-  background:var(--surface);border:1px solid var(--border2);
+  background:var(--navy);border:1px solid var(--cobalt-brd);
   border-radius:4px;padding:3px 8px;
-  font-family:var(--fm);font-size:.68em;color:var(--text);
+  font-family:var(--fm);font-size:.68em;color:#fff;
   white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .15s;z-index:50;
 }
 .hm-cell:hover .hm-htip{opacity:1;}
@@ -155,40 +160,40 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px
   font-size:.65em;color:var(--muted);
 }
 .hm-leg-bar{width:80px;height:8px;border-radius:4px;
-  background:linear-gradient(90deg,rgba(192,57,43,.1),rgba(192,57,43,1));}
+  background:linear-gradient(90deg,#DDE1E7,rgba(192,57,43,1));}
 
 /* ── COMPARATIVO MEBAR ── */
 .comp-list{padding:8px 0;}
 .comp-row{display:flex;align-items:center;gap:9px;padding:5px 16px;transition:background .15s;}
-.comp-row:hover{background:rgba(255,255,255,.025);}
+.comp-row:hover{background:rgba(0,87,168,.04);}
 .comp-tname{font-size:.8em;font-weight:500;color:var(--text);width:190px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.comp-bar-w{flex:1;height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;}
+.comp-bar-w{flex:1;height:6px;background:rgba(0,0,0,.07);border-radius:3px;overflow:hidden;}
 .comp-bar{height:100%;border-radius:3px;transition:width .5s ease;}
 .comp-pct{font-family:var(--fm);font-size:.75em;font-weight:600;min-width:44px;text-align:right;flex-shrink:0;}
 .comp-abs{font-family:var(--fm);font-size:.7em;color:var(--muted);min-width:38px;text-align:right;flex-shrink:0;}
 
 /* ── HOMICIDIO PANEL ── */
 .hom-panel{
-  background:linear-gradient(135deg,rgba(139,0,0,.18),rgba(16,20,37,.95));
-  border:1px solid rgba(192,57,43,.4);
+  background:linear-gradient(135deg,rgba(192,57,43,.05),var(--card) 60%);
+  border:1px solid rgba(192,57,43,.3);
   border-radius:8px;overflow:hidden;margin-bottom:11px;
-  box-shadow:0 0 30px rgba(192,57,43,.08);
+  box-shadow:0 1px 6px rgba(192,57,43,.08);
 }
 .hom-header{
   padding:13px 20px;
-  background:linear-gradient(90deg,rgba(139,0,0,.3),transparent);
-  border-bottom:1px solid rgba(192,57,43,.25);
+  background:linear-gradient(90deg,rgba(192,57,43,.08),transparent);
+  border-bottom:1px solid rgba(192,57,43,.2);
   display:flex;align-items:center;gap:12px;
 }
-.hom-title{font-family:var(--fp);font-size:1.1em;font-weight:800;color:var(--red-ll);letter-spacing:.06em;}
-.hom-subtitle{font-size:.72em;color:rgba(255,200,200,.6);margin-top:2px;}
-.hom-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(192,57,43,.15);}
-.hom-stat{background:rgba(7,8,15,.8);padding:14px 18px;text-align:center;}
-.hom-stat-n{font-family:var(--fm);font-size:2em;font-weight:600;color:var(--red-l);line-height:1;}
-.hom-stat-l{font-size:.7em;color:rgba(255,200,200,.5);margin-top:3px;font-family:var(--fp);letter-spacing:.06em;}
+.hom-title{font-family:var(--fp);font-size:1.1em;font-weight:800;color:var(--red);letter-spacing:.06em;}
+.hom-subtitle{font-size:.72em;color:var(--muted);margin-top:2px;}
+.hom-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(192,57,43,.12);}
+.hom-stat{background:var(--card);padding:14px 18px;text-align:center;}
+.hom-stat-n{font-family:var(--fm);font-size:2em;font-weight:600;color:var(--red);line-height:1;}
+.hom-stat-l{font-size:.7em;color:var(--muted);margin-top:3px;font-family:var(--fp);letter-spacing:.06em;}
 .hom-charts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:rgba(192,57,43,.1);}
-.hom-chart{background:rgba(7,8,15,.7);padding:14px 16px;}
-.hom-chart-tit{font-family:var(--fp);font-size:.78em;font-weight:700;color:rgba(255,200,200,.5);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
+.hom-chart{background:var(--card);padding:14px 16px;}
+.hom-chart-tit{font-family:var(--fp);font-size:.78em;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
 
 /* ── TIMELINE BARS (mini) ── */
 .mini-bars{display:flex;align-items:flex-end;gap:2px;height:50px;}
@@ -197,8 +202,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px
 
 /* ── CAI COMPARE ── */
 .cai-split{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
-.cai-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px 16px;}
-.cai-name{font-family:var(--fp);font-size:1.1em;font-weight:800;color:#fff;margin-bottom:4px;}
+.cai-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px 16px;box-shadow:0 1px 4px rgba(0,0,0,.07);}
+.cai-name{font-family:var(--fp);font-size:1.1em;font-weight:800;color:var(--navy);margin-bottom:4px;}
 .cai-sub{font-size:.72em;color:var(--muted);margin-bottom:12px;}
 .cai-stat-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);}
 .cai-stat-row:last-child{border-bottom:none;}
@@ -212,39 +217,39 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px
 .acard{border-radius:8px;padding:13px 15px;border-left:4px solid;position:relative;overflow:hidden;}
 .acard.r{background:var(--red-bg);border-color:var(--red);}
 .acard.o{background:var(--orange-bg);border-color:var(--orange);}
-.acard.y{background:var(--yellow-bg);border-color:var(--yellow);}
-.acard.v{background:rgba(125,60,152,.12);border-color:var(--violet);}
+.acard.y{background:var(--yellow-bg);border-color:#d4ac0d;}
+.acard.v{background:rgba(107,63,158,.08);border-color:var(--violet);}
 .alev{font-family:var(--fp);font-size:.66em;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:3px;}
-.acard.r .alev{color:var(--red-l);}.acard.o .alev{color:var(--orange);}
-.acard.y .alev{color:var(--yellow);}.acard.v .alev{color:#b87ee8;}
-.atit{font-family:var(--fp);font-size:.98em;font-weight:700;color:#fff;margin-bottom:5px;line-height:1.2;}
-.abody{font-size:.76em;color:rgba(255,255,255,.6);line-height:1.5;}
+.acard.r .alev{color:var(--red);}.acard.o .alev{color:var(--orange);}
+.acard.y .alev{color:#b8860b;}.acard.v .alev{color:var(--violet);}
+.atit{font-family:var(--fp);font-size:.98em;font-weight:700;color:var(--navy);margin-bottom:5px;line-height:1.2;}
+.abody{font-size:.76em;color:var(--muted);line-height:1.5;}
 .amet{font-family:var(--fm);font-size:.88em;font-weight:600;margin-top:5px;}
-.acard.r .amet{color:var(--red-l);}.acard.o .amet{color:var(--orange);}
-.acard.y .amet{color:var(--yellow);}.acard.v .amet{color:#b87ee8;}
-.anum{position:absolute;right:12px;top:8px;font-family:var(--fm);font-size:2.2em;font-weight:700;opacity:.07;color:#fff;}
+.acard.r .amet{color:var(--red);}.acard.o .amet{color:var(--orange);}
+.acard.y .amet{color:#b8860b;}.acard.v .amet{color:var(--violet);}
+.anum{position:absolute;right:12px;top:8px;font-family:var(--fm);font-size:2.2em;font-weight:700;opacity:.06;color:var(--navy);}
 
 /* ── RECOMENDACIONES ── */
 .rgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px;}
 @media(max-width:1400px){.rgrid{grid-template-columns:repeat(3,1fr);}}
 @media(max-width:800px){.rgrid{grid-template-columns:1fr 1fr;}}
-.rcard{background:var(--card);border:1px solid var(--border);border-top:3px solid var(--rc,var(--red));border-radius:8px;padding:13px 15px;}
-.rnum{font-family:var(--fm);font-size:.65em;color:var(--rc,var(--red));margin-bottom:5px;font-weight:600;}
-.rtit{font-family:var(--fp);font-size:.88em;font-weight:700;color:#fff;margin-bottom:5px;line-height:1.25;}
+.rcard{background:var(--card);border:1px solid var(--border);border-top:3px solid var(--rc,var(--gold));border-radius:8px;padding:13px 15px;box-shadow:0 1px 4px rgba(0,0,0,.07);}
+.rnum{font-family:var(--fm);font-size:.65em;color:var(--rc,var(--gold));margin-bottom:5px;font-weight:600;}
+.rtit{font-family:var(--fp);font-size:.88em;font-weight:700;color:var(--navy);margin-bottom:5px;line-height:1.25;}
 .rbody{font-size:.75em;color:var(--muted);line-height:1.5;}
-.rtag{display:inline-block;margin-top:7px;padding:2px 8px;border-radius:4px;font-family:var(--fp);font-size:.63em;font-weight:700;letter-spacing:.06em;border:1px solid var(--rc,var(--red));color:var(--rc,var(--red));opacity:.8;}
+.rtag{display:inline-block;margin-top:7px;padding:2px 8px;border-radius:4px;font-family:var(--fp);font-size:.63em;font-weight:700;letter-spacing:.06em;border:1px solid var(--rc,var(--gold));color:var(--rc,var(--gold));opacity:.9;}
 
 /* ── SECTION TITLE ── */
-.stit{font-family:var(--fp);font-size:1em;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:11px;display:flex;align-items:center;gap:10px;}
+.stit{font-family:var(--fp);font-size:1em;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--navy);margin-bottom:11px;display:flex;align-items:center;gap:10px;}
 .stit::after{content:'';flex:1;height:1px;background:var(--border);}
-.stit.crit{color:rgba(231,76,60,.6);}
-.stit.crit::before{content:'▲';color:var(--red-l);margin-right:4px;font-size:.9em;}
+.stit.crit{color:var(--red);}
+.stit.crit::before{content:'▲';color:var(--red);margin-right:4px;font-size:.9em;}
 
 /* ── HOUR BAR (simple) ── */
 .hbar-wrap{display:flex;align-items:flex-end;gap:1.5px;height:70px;padding:0 2px;}
 .hbar{flex:1;border-radius:2px 2px 0 0;position:relative;cursor:default;transition:filter .1s;}
 .hbar:hover{filter:brightness(1.3);}
-.hbar-tip{position:absolute;bottom:calc(100%+3px);left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--border2);border-radius:3px;padding:2px 6px;font-family:var(--fm);font-size:.68em;color:var(--text);white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .15s;z-index:20;}
+.hbar-tip{position:absolute;bottom:calc(100%+3px);left:50%;transform:translateX(-50%);background:var(--navy);border:1px solid var(--cobalt-brd);border-radius:3px;padding:2px 6px;font-family:var(--fm);font-size:.68em;color:#fff;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .15s;z-index:20;}
 .hbar:hover .hbar-tip{opacity:1;}
 .hbar-xlbl{display:flex;gap:1.5px;padding:0 2px;}
 .hbar-xl{flex:1;font-family:var(--fm);font-size:.5em;color:var(--muted);text-align:center;}
@@ -252,10 +257,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px
 /* ── LISTA SIMPLE ── */
 .slist{padding:6px 0;}
 .srow{display:flex;align-items:center;gap:9px;padding:5px 16px;transition:background .15s;}
-.srow:hover{background:rgba(255,255,255,.025);}
+.srow:hover{background:rgba(0,87,168,.04);}
 .srank{font-family:var(--fm);font-size:.7em;color:var(--dim);width:16px;text-align:right;flex-shrink:0;}
 .sname{flex:1;font-size:.8em;color:var(--text);}
-.sbarw{width:100px;height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;flex-shrink:0;}
+.sbarw{width:100px;height:5px;background:rgba(0,0,0,.07);border-radius:3px;overflow:hidden;flex-shrink:0;}
 .sbarf{height:100%;border-radius:3px;transition:width .4s;}
 .scnt{font-family:var(--fm);font-size:.76em;min-width:38px;text-align:right;flex-shrink:0;}
 
@@ -284,7 +289,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px
     </div>
     <div class="tb-divv"></div>
     <div class="tb-stat">
-      <div class="tb-stat-n" style="color:var(--red-ll)">5.8%</div>
+      <div class="tb-stat-n" style="color:var(--gold-l)">5.8%</div>
       <div class="tb-stat-l">DE HOMICIDIOS MEBAR</div>
     </div>
   </div>
@@ -319,11 +324,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px
 <!-- ═══ KPIs ═══ -->
 <div class="kstrip">
   <div class="kcard critica"><div class="kico">💀</div><div class="key">Homicidios dolosos</div><div class="knum" id="kHom">43</div><div class="klbl">Homicidios en 2025</div><div class="ksub">5.8% del total MEBAR</div></div>
-  <div class="kcard" style="--kc:#e67e22"><div class="kico">👛</div><div class="key">Delito dominante</div><div class="knum" id="kD1n">206</div><div class="klbl" id="kD1l">HURTO PERSONAS</div><div class="ksub" id="kD1s">35.9% del total barrio</div></div>
-  <div class="kcard" style="--kc:#e74c3c"><div class="kico">🔫</div><div class="key">Arma predominante</div><div class="knum" id="kArn">36.6%</div><div class="klbl" id="kArl">ARMA DE FUEGO</div><div class="ksub" id="kArs">210 eventos con arma</div></div>
-  <div class="kcard" style="--kc:#9b59b6"><div class="kico">📅</div><div class="key">Día más peligroso</div><div class="knum" id="kDn">DOM</div><div class="klbl" id="kDl">Domingo · 88 eventos</div><div class="ksub" id="kDs">00:00 h pico máximo</div></div>
-  <div class="kcard" style="--kc:#2471a3"><div class="kico">👫</div><div class="key">Perfil víctima</div><div class="knum" id="kGn">58.4%</div><div class="klbl" id="kGl">MASCULINO</div><div class="ksub">Edad promedio: 35.2 años</div></div>
-  <div class="kcard" style="--kc:#d4ac0d"><div class="kico">📍</div><div class="key">Lugar del hecho</div><div class="knum" id="kSn">84.7%</div><div class="klbl">VÍAS PÚBLICAS</div><div class="ksub">486 de 574 eventos</div></div>
+  <div class="kcard" style="--kc:#E06B1A"><div class="kico">👛</div><div class="key">Delito dominante</div><div class="knum" id="kD1n">206</div><div class="klbl" id="kD1l">HURTO PERSONAS</div><div class="ksub" id="kD1s">35.9% del total barrio</div></div>
+  <div class="kcard" style="--kc:#C0392B"><div class="kico">🔫</div><div class="key">Arma predominante</div><div class="knum" id="kArn">36.6%</div><div class="klbl" id="kArl">ARMA DE FUEGO</div><div class="ksub" id="kArs">210 eventos con arma</div></div>
+  <div class="kcard" style="--kc:#6B3F9E"><div class="kico">📅</div><div class="key">Día más peligroso</div><div class="knum" id="kDn">DOM</div><div class="klbl" id="kDl">Domingo · 88 eventos</div><div class="ksub" id="kDs">00:00 h pico máximo</div></div>
+  <div class="kcard" style="--kc:#0057A8"><div class="kico">👫</div><div class="key">Perfil víctima</div><div class="knum" id="kGn">58.4%</div><div class="klbl" id="kGl">MASCULINO</div><div class="ksub">Edad promedio: 35.2 años</div></div>
+  <div class="kcard" style="--kc:#C8A84B"><div class="kico">📍</div><div class="key">Lugar del hecho</div><div class="knum" id="kSn">84.7%</div><div class="klbl">VÍAS PÚBLICAS</div><div class="ksub">486 de 574 eventos</div></div>
 </div>
 
 <!-- ═══ PANEL ROJO HOMICIDIOS ═══ -->
@@ -351,11 +356,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px
 <!-- ═══ TENDENCIA + COMPARATIVO MEBAR ═══ -->
 <div class="g21">
   <div class="card">
-    <div class="ch"><div><div class="cey">Análisis temporal · 52 semanas</div><div class="ctit">Tendencia Semanal de Delitos · Rebolo 2025</div></div><span class="cbadge" style="background:var(--red-bg);color:var(--red-l);border:1px solid rgba(192,57,43,.3)" id="trendBadge">Sem 1–52</span></div>
+    <div class="ch"><div><div class="cey">Análisis temporal · 52 semanas</div><div class="ctit">Tendencia Semanal de Delitos · Rebolo 2025</div></div><span class="cbadge" style="background:var(--cobalt-bg);color:var(--cobalt);border:1px solid var(--cobalt-brd)" id="trendBadge">Sem 1–52</span></div>
     <div class="cb"><div class="cw" style="height:220px"><canvas id="cTrend"></canvas></div></div>
   </div>
   <div class="card">
-    <div class="ch"><div><div class="cey">Peso relativo en el área</div><div class="ctit">Rebolo vs MEBAR por Tipo de Delito</div></div><span class="cbadge" style="background:var(--red-bg);color:var(--red-l);border:1px solid rgba(192,57,43,.3)">% concentración</span></div>
+    <div class="ch"><div><div class="cey">Peso relativo en el área</div><div class="ctit">Rebolo vs MEBAR por Tipo de Delito</div></div><span class="cbadge" style="background:var(--cobalt-bg);color:var(--cobalt);border:1px solid var(--cobalt-brd)">% concentración</span></div>
     <div class="comp-list" id="compList"></div>
   </div>
 </div>
@@ -363,7 +368,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px
 <!-- ═══ HEATMAP DIA x HORA + DÍA ═══ -->
 <div class="g21">
   <div class="card">
-    <div class="ch"><div><div class="cey">Matriz de riesgo territorial</div><div class="ctit">Mapa de Calor: Día × Hora (todos los delitos)</div></div><span class="cbadge" style="background:var(--red-bg);color:var(--red-l);border:1px solid rgba(192,57,43,.3)">574 eventos</span></div>
+    <div class="ch"><div><div class="cey">Matriz de riesgo territorial</div><div class="ctit">Mapa de Calor: Día × Hora (todos los delitos)</div></div><span class="cbadge" style="background:var(--cobalt-bg);color:var(--cobalt);border:1px solid var(--cobalt-brd)">574 eventos</span></div>
     <div class="hm-legend"><span>Menor incidencia</span><div class="hm-leg-bar"></div><span>Mayor incidencia</span></div>
     <div class="heatmap-grid" id="hmGrid"></div>
   </div>
@@ -440,13 +445,13 @@ const EDAD_L=['0–17 años','18–30 años','31–50 años','51+ años','Sin da
 const GEN_L=['Masculino','Femenino','No reportado'];
 
 const TEMA_COLORS={
-  'HURTO PERSONAS':'#e67e22','HURTO CELULAR':'#f39c12',
-  'HOMICIDIO DOLOSO O INTENCIONAL':'#ff3333',
-  'VIOLENCIA INTRAFAMILIAR':'#2471a3','LESIONES PERSONALES':'#9b59b6',
-  'EXTORSION':'#00c9ff','HURTO MOTOCICLETAS':'#d35400',
-  'HURTO RESIDENCIAS':'#e74c3c','HURTO COMERCIO':'#c0392b',
-  'LESIONES AT':'#8e44ad','DELITOS SEXUALES':'#e91e63',
-  'HURTO A BICICLETAS':'#27ae60','HURTO AUTOMOTORES':'#922b21'
+  'HURTO PERSONAS':'#E06B1A','HURTO CELULAR':'#C8A84B',
+  'HOMICIDIO DOLOSO O INTENCIONAL':'#C0392B',
+  'VIOLENCIA INTRAFAMILIAR':'#0057A8','LESIONES PERSONALES':'#6B3F9E',
+  'EXTORSION':'#0099CC','HURTO MOTOCICLETAS':'#B0541A',
+  'HURTO RESIDENCIAS':'#D4654A','HURTO COMERCIO':'#9A3226',
+  'LESIONES AT':'#8E5DB8','DELITOS SEXUALES':'#A8336B',
+  'HURTO A BICICLETAS':'#1A7A4A','HURTO AUTOMOTORES':'#7A2418'
 };
 
 /* Pre-computed analytics */
@@ -458,8 +463,8 @@ const fT=document.getElementById('fT');
 L.temas.forEach((t,i)=>{const o=document.createElement('option');o.value=i;o.textContent=t;fT.appendChild(o);});
 
 /* Chart defaults */
-Chart.defaults.color='rgba(208,216,245,.6)';
-Chart.defaults.borderColor='rgba(26,32,64,.8)';
+Chart.defaults.color='rgba(26,40,64,.65)';
+Chart.defaults.borderColor='rgba(221,225,231,.9)';
 Chart.defaults.font.family='IBM Plex Mono, monospace';
 Chart.defaults.font.size=11;
 
@@ -476,14 +481,14 @@ const TP_BASE={
   plugins:{
     legend:{display:false},
     tooltip:{
-      backgroundColor:'rgba(12,15,28,.96)',borderColor:'#222a52',borderWidth:1,
+      backgroundColor:'rgba(0,40,85,.96)',borderColor:'#0057A8',borderWidth:1,
       titleFont:{family:'Barlow Condensed, sans-serif',weight:'700',size:13},
       bodyFont:{family:'IBM Plex Mono, monospace',size:11},padding:10
     }
   },
   scales:{
-    x:{grid:{color:'rgba(26,32,64,.7)'},ticks:{color:'rgba(208,216,245,.45)'}},
-    y:{grid:{color:'rgba(26,32,64,.7)'},ticks:{color:'rgba(208,216,245,.45)'}}
+    x:{grid:{color:'rgba(221,225,231,.7)'},ticks:{color:'rgba(26,40,64,.5)'}},
+    y:{grid:{color:'rgba(221,225,231,.7)'},ticks:{color:'rgba(26,40,64,.5)'}}
   }
 };
 
@@ -598,8 +603,8 @@ function renderHomPanel(d,N){
     data:{labels:sems.map(s=>`S${s}`),datasets:[{data:homTrend,backgroundColor:'rgba(192,57,43,.7)',borderRadius:2,borderSkipped:false}]},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:false},tooltip:{...TP_BASE.plugins.tooltip}},
-      scales:{x:{grid:{display:false},ticks:{color:'rgba(255,100,100,.3)',font:{size:7},maxTicksLimit:13}},
-              y:{grid:{color:'rgba(192,57,43,.1)'},ticks:{color:'rgba(255,100,100,.4)',font:{size:8}},beginAtZero:true}}
+      scales:{x:{grid:{display:false},ticks:{color:'rgba(192,57,43,.45)',font:{size:7},maxTicksLimit:13}},
+              y:{grid:{color:'rgba(192,57,43,.12)'},ticks:{color:'rgba(192,57,43,.55)',font:{size:8}},beginAtZero:true}}
     }
   });
 
@@ -612,8 +617,8 @@ function renderHomPanel(d,N){
     data:{labels:DIA_N.map(d=>d.slice(0,3)),datasets:[{data:hDia,backgroundColor:hDia.map(v=>v===maxD?'rgba(231,76,60,.9)':'rgba(139,0,0,.5)'),borderRadius:3,borderSkipped:false}]},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:false},tooltip:{...TP_BASE.plugins.tooltip,callbacks:{label:ctx=>`${ctx.parsed.y} homicidios`}}},
-      scales:{x:{grid:{display:false},ticks:{color:'rgba(255,150,150,.5)',font:{size:9}}},
-              y:{grid:{color:'rgba(192,57,43,.1)'},ticks:{color:'rgba(255,100,100,.4)',font:{size:8}},beginAtZero:true}}
+      scales:{x:{grid:{display:false},ticks:{color:'rgba(192,57,43,.5)',font:{size:9}}},
+              y:{grid:{color:'rgba(192,57,43,.12)'},ticks:{color:'rgba(192,57,43,.55)',font:{size:8}},beginAtZero:true}}
     }
   });
 
@@ -626,8 +631,8 @@ function renderHomPanel(d,N){
     data:{labels:Array.from({length:24},(_,h)=>h),datasets:[{data:hHora,backgroundColor:hHora.map(v=>v===maxH?'rgba(255,50,50,.9)':v>2?'rgba(192,57,43,.6)':'rgba(139,0,0,.35)'),borderRadius:2,borderSkipped:false}]},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:false},tooltip:{...TP_BASE.plugins.tooltip,callbacks:{label:ctx=>`${ctx.parsed.y} hom. a las ${ctx.label}:00`}}},
-      scales:{x:{grid:{display:false},ticks:{color:'rgba(255,150,150,.4)',font:{size:8},maxTicksLimit:8}},
-              y:{grid:{color:'rgba(192,57,43,.1)'},ticks:{color:'rgba(255,100,100,.4)',font:{size:8}},beginAtZero:true}}
+      scales:{x:{grid:{display:false},ticks:{color:'rgba(192,57,43,.45)',font:{size:8},maxTicksLimit:8}},
+              y:{grid:{color:'rgba(192,57,43,.12)'},ticks:{color:'rgba(192,57,43,.55)',font:{size:8}},beginAtZero:true}}
     }
   });
 }
@@ -643,11 +648,11 @@ function renderTrend(d,N,ss,se){
   // Top 3 temas
   const tc=cnt(d.map(r=>r[_T]));
   const top3=topN(tc,3).map(([i])=>+i);
-  const tColors=['#e74c3c','#e67e22','#2471a3'];
+  const tColors=['#C0392B','#E06B1A','#0057A8'];
 
   const datasets=[{
     label:'Total',data:sems.map(s=>total[s]||0),
-    borderColor:'rgba(192,57,43,.6)',backgroundColor:'rgba(139,0,0,.1)',
+    borderColor:'rgba(0,87,168,.7)',backgroundColor:'rgba(0,87,168,.08)',
     fill:true,tension:.3,borderWidth:2,pointRadius:1.5,pointHoverRadius:4,
   }];
   top3.forEach((ti,idx)=>{
@@ -667,7 +672,7 @@ function renderTrend(d,N,ss,se){
     options:{...TP_BASE,responsive:true,maintainAspectRatio:false,
       plugins:{
         ...TP_BASE.plugins,
-        legend:{display:true,position:'top',labels:{color:'rgba(208,216,245,.6)',font:{size:10},boxWidth:12,padding:12}},
+        legend:{display:true,position:'top',labels:{color:'rgba(26,40,64,.65)',font:{size:10},boxWidth:12,padding:12}},
         tooltip:{...TP_BASE.plugins.tooltip,mode:'index',intersect:false}
       },
       scales:{
@@ -688,8 +693,8 @@ function renderComparativo(N){
     const w=(v.rate/maxRate*100).toFixed(1);
     const isCrit=v.rate>=5;
     const isHigh=v.rate>=2&&!isCrit;
-    const color=isCrit?'var(--red-l)':isHigh?'var(--orange)':'var(--blue)';
-    const barColor=isCrit?'rgba(231,76,60,.8)':isHigh?'rgba(230,126,34,.7)':'rgba(36,113,163,.7)';
+    const color=isCrit?'var(--red)':isHigh?'var(--orange)':'var(--cobalt)';
+    const barColor=isCrit?'rgba(192,57,43,.8)':isHigh?'rgba(224,107,26,.75)':'rgba(0,87,168,.7)';
     return `<div class="comp-row">
       <span class="comp-tname" title="${t}">${t}</span>
       <div class="comp-bar-w"><div class="comp-bar" style="width:${w}%;background:${barColor}"></div></div>
@@ -719,11 +724,11 @@ function renderHeatmap(d,N){
     for(let h=0;h<24;h++){
       const v=matrix[d][h];
       const intensity=maxV>0?v/maxV:0;
-      const alpha=(0.05+intensity*0.95).toFixed(2);
-      const r=Math.round(192*intensity+30*(1-intensity));
-      const g=Math.round(57*intensity+35*(1-intensity));
-      const b=Math.round(43*intensity+80*(1-intensity));
-      html+=`<div class="hm-cell" style="background:rgba(${r},${g},${b},${alpha})">
+      // Gradiente: gris claro (baja incidencia) → cobalt → rojo (alta incidencia)
+      const r=Math.round(192*intensity+221*(1-intensity));
+      const g=Math.round(57*intensity+225*(1-intensity));
+      const b=Math.round(43*intensity+231*(1-intensity));
+      html+=`<div class="hm-cell" style="background:rgb(${r},${g},${b})">
         <div class="hm-htip">${DIA_N[d].slice(0,3)} ${String(h).padStart(2,'0')}:00 · ${v}</div>
       </div>`;
     }
@@ -738,7 +743,7 @@ function renderDia(d,N){
   const mx=Math.max(...dc);
   mkChart('cDia',{
     type:'bar',
-    data:{labels:DIA_N,datasets:[{data:dc,backgroundColor:dc.map(v=>v===mx?'rgba(192,57,43,.85)':'rgba(36,113,163,.55)'),borderRadius:4,borderSkipped:false}]},
+    data:{labels:DIA_N,datasets:[{data:dc,backgroundColor:dc.map(v=>v===mx?'rgba(192,57,43,.85)':'rgba(0,87,168,.55)'),borderRadius:4,borderSkipped:false}]},
     options:{...TP_BASE,responsive:true,maintainAspectRatio:false,
       plugins:{...TP_BASE.plugins,tooltip:{...TP_BASE.plugins.tooltip,callbacks:{label:ctx=>`${ctx.parsed.y} eventos (${pct(ctx.parsed.y,N)})`}}},
       scales:{x:{...TP_BASE.scales.x},y:{...TP_BASE.scales.y,beginAtZero:true}}
@@ -753,7 +758,7 @@ function renderHoras24(d,N){
   const mx=Math.max(...hc);
   const ww=document.getElementById('hbarWrap');
   const xl=document.getElementById('hbarXlbl');
-  const fColors=['rgba(155,89,182,.8)','rgba(41,128,185,.8)','rgba(230,126,34,.8)','rgba(192,57,43,.85)'];
+  const fColors=['rgba(107,63,158,.8)','rgba(0,87,168,.8)','rgba(224,107,26,.8)','rgba(192,57,43,.85)'];
   ww.innerHTML=hc.map((v,h)=>{
     const ht=mx>0?(v/mx*100).toFixed(0):0;
     const fi=h<6?0:h<12?1:h<18?2:3;
@@ -773,10 +778,10 @@ function renderTema(d,N){
   const colors=labels.map(l=>TEMA_COLORS[l]||'#4e5d82');
   mkChart('cTema',{
     type:'doughnut',
-    data:{labels,datasets:[{data:vals,backgroundColor:colors,borderWidth:2,borderColor:Array(colors.length).fill('#101425'),hoverOffset:7}]},
+    data:{labels,datasets:[{data:vals,backgroundColor:colors,borderWidth:2,borderColor:Array(colors.length).fill('#ffffff'),hoverOffset:7}]},
     options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
       plugins:{
-        legend:{display:true,position:'right',labels:{color:'rgba(208,216,245,.65)',font:{size:9.5},boxWidth:10,padding:7}},
+        legend:{display:true,position:'right',labels:{color:'rgba(26,40,64,.65)',font:{size:9.5},boxWidth:10,padding:7}},
         tooltip:{...TP_BASE.plugins.tooltip,callbacks:{label:ctx=>`${ctx.label}: ${ctx.parsed} (${pct(ctx.parsed,N)})`}}
       }
     }
@@ -787,8 +792,8 @@ function renderTema(d,N){
 function renderMod(d,N){
   const mc=cnt(d.map(r=>r[_MOD]));
   const top=topN(mc,8);
-  const mColors=['rgba(192,57,43,.8)','rgba(139,0,0,.7)','rgba(231,76,60,.6)','rgba(230,126,34,.7)',
-                 'rgba(41,128,185,.7)','rgba(125,60,152,.7)','rgba(39,174,96,.6)','rgba(78,93,130,.6)'];
+  const mColors=['rgba(192,57,43,.8)','rgba(154,50,38,.75)','rgba(224,107,26,.75)','rgba(200,168,75,.8)',
+                 'rgba(0,87,168,.75)','rgba(107,63,158,.7)','rgba(26,122,74,.65)','rgba(160,170,187,.7)'];
   mkChart('cMod',{
     type:'bar',
     data:{labels:top.map(([i])=>L.mods[i]),datasets:[{data:top.map(([,v])=>v),backgroundColor:mColors,borderRadius:4,borderSkipped:false}]},
@@ -823,9 +828,9 @@ function renderGen(d,N){
   d.forEach(r=>{if(r[_G]>=0&&r[_G]<3)gc[r[_G]]++;});
   mkChart('cGen',{
     type:'doughnut',
-    data:{labels:GEN_L,datasets:[{data:gc,backgroundColor:['#2471a3','#e91e63','#4e5d82'],borderWidth:2,borderColor:'#101425',hoverOffset:5}]},
+    data:{labels:GEN_L,datasets:[{data:gc,backgroundColor:['#0057A8','#A8336B','#A0AABB'],borderWidth:2,borderColor:'#ffffff',hoverOffset:5}]},
     options:{responsive:true,maintainAspectRatio:false,cutout:'65%',
-      plugins:{legend:{display:true,position:'bottom',labels:{color:'rgba(208,216,245,.65)',font:{size:10},boxWidth:11,padding:8}},
+      plugins:{legend:{display:true,position:'bottom',labels:{color:'rgba(26,40,64,.65)',font:{size:10},boxWidth:11,padding:8}},
         tooltip:{...TP_BASE.plugins.tooltip,callbacks:{label:ctx=>`${ctx.label}: ${ctx.parsed} (${pct(ctx.parsed,N)})`}}}}
   });
 }
@@ -836,7 +841,7 @@ function renderEdad(d,N){
   d.forEach(r=>{if(r[_EB]>=0&&r[_EB]<5)ec[r[_EB]]++;});
   mkChart('cEdad',{
     type:'bar',
-    data:{labels:EDAD_L,datasets:[{data:ec,backgroundColor:['rgba(22,160,133,.7)','rgba(230,126,34,.8)','rgba(192,57,43,.85)','rgba(125,60,152,.7)','rgba(78,93,130,.5)'],borderRadius:4,borderSkipped:false}]},
+    data:{labels:EDAD_L,datasets:[{data:ec,backgroundColor:['rgba(26,122,74,.7)','rgba(224,107,26,.8)','rgba(192,57,43,.85)','rgba(107,63,158,.7)','rgba(160,170,187,.6)'],borderRadius:4,borderSkipped:false}]},
     options:{...TP_BASE,responsive:true,maintainAspectRatio:false,
       plugins:{...TP_BASE.plugins,tooltip:{...TP_BASE.plugins.tooltip,callbacks:{label:ctx=>`${ctx.parsed.y} víctimas (${pct(ctx.parsed.y,N)})`}}},
       scales:{x:{...TP_BASE.scales.x},y:{...TP_BASE.scales.y,beginAtZero:true}}
@@ -850,7 +855,7 @@ function renderSitio(d,N){
   const top=topN(sc,7);
   mkChart('cSit',{
     type:'bar',
-    data:{labels:top.map(([i])=>L.sits[i]),datasets:[{data:top.map(([,v])=>v),backgroundColor:'rgba(36,113,163,.7)',borderRadius:3,borderSkipped:false}]},
+    data:{labels:top.map(([i])=>L.sits[i]),datasets:[{data:top.map(([,v])=>v),backgroundColor:'rgba(0,87,168,.7)',borderRadius:3,borderSkipped:false}]},
     options:{...TP_BASE,responsive:true,maintainAspectRatio:false,indexAxis:'y',
       plugins:{...TP_BASE.plugins,tooltip:{...TP_BASE.plugins.tooltip,callbacks:{label:ctx=>`${ctx.parsed.x} (${pct(ctx.parsed.x,N)})`}}},
       scales:{x:{...TP_BASE.scales.x,beginAtZero:true,ticks:{...TP_BASE.scales.x.ticks,font:{size:9}}},
@@ -865,7 +870,7 @@ function renderCAI(d,N){
   const top=topN(cc,6);
   const mx=top.length?top[0][1]:1;
   const el=document.getElementById('caiList');
-  const cColors=['rgba(192,57,43,.7)','rgba(231,76,60,.6)','rgba(230,126,34,.65)','rgba(41,128,185,.6)','rgba(125,60,152,.6)','rgba(39,174,96,.5)'];
+  const cColors=['rgba(0,87,168,.8)','rgba(200,168,75,.85)','rgba(224,107,26,.75)','rgba(107,63,158,.7)','rgba(26,122,74,.7)','rgba(160,170,187,.8)'];
   el.innerHTML=top.map(([ci,cv],i)=>{
     const w=(cv/mx*100).toFixed(1);
     const name=L.cais[ci].replace('CAI ','');
@@ -940,19 +945,19 @@ function renderRecos(d,N){
   const vifN=d.filter(r=>r[_T]===L.temas.indexOf('VIOLENCIA INTRAFAMILIAR')).length;
 
   const recos=[
-    {rc:'#e74c3c',num:'01',tag:'OPERATIVO ALTO IMPACTO',
+    {rc:'#C0392B',num:'01',tag:'OPERATIVO ALTO IMPACTO',
      tit:'Operativo permanente anti-sicariato en Rebolo',
      body:`${homN} homicidios con 86% por sicariato exigen presencia permanente de SIJIN, GAULA y Fiscalía CTI. Instalar retenes de armas en ingresos al barrio. Solicitar declaratoria de zona de intervención prioritaria al Consejo de Seguridad Distrital. Implementar circuito cerrado de TV en cruces críticos.`},
-    {rc:'#ff5555',num:'02',tag:'INTELIGENCIA TERRITORIAL',
+    {rc:'#9A3226',num:'02',tag:'INTELIGENCIA TERRITORIAL',
      tit:'Desarticulación del GAO operante en Rebolo',
      body:`El perfil de sicariato indica estructura armada consolidada. Activar red de informantes con protección garantizada. Coordinar con DIJIN para operación de inteligencia. Compartir con la Defensoría del Pueblo los patrones de desplazamiento y control identificados en el levantamiento PP8 ya disponible.`},
-    {rc:'#e67e22',num:'03',tag:'SEGURIDAD NOCTURNA',
+    {rc:'#E06B1A',num:'03',tag:'SEGURIDAD NOCTURNA',
      tit:'Patrullaje intensivo 22:00–04:00 en vías públicas',
      body:`El 23:00 concentra el pico de homicidios (9 casos) y el 00:00 el pico de hurtos (23 casos). Implementar patrullaje a pie y en moto en vías principales del barrio en esa franja. Coordinación con CAI Cervecería y CAI Rebolo para turnos de saturación nocturna los lunes, jueves y domingos.`},
-    {rc:'#2471a3',num:'04',tag:'PROTECCIÓN VIF',
+    {rc:'#0057A8',num:'04',tag:'PROTECCIÓN VIF',
      tit:'Ruta de atención VIF urgente en Rebolo',
      body:`${vifN} casos de VIF concentrados en domingos y madrugadas. Establecer puesto comunitario de atención a violencias de género en el barrio con operación los fines de semana. Capacitar a la JAC y líderes comunitarios en detección y ruta de denuncia. Articular con Comisaría de Familia localidad Suroriente.`},
-    {rc:'#9b59b6',num:'05',tag:'RECUPERACIÓN TERRITORIAL',
+    {rc:'#6B3F9E',num:'05',tag:'RECUPERACIÓN TERRITORIAL',
      tit:'Plan integral de recuperación de Rebolo',
      body:`Integrar los datos del tablero PP8-VIRTUS GLOBAL con el diagnóstico SIEDCO para elaborar un plan de intervención territorial coordinado entre Alcaldía Local, OSCC, Estación San José, Fiscalía y ICBF. Establecer Consejo de Seguridad Local mensual específico para Rebolo con metas medibles de reducción de homicidios (-30% en 6 meses).`},
   ];
